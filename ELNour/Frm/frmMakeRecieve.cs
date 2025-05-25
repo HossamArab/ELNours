@@ -19,12 +19,20 @@ namespace ELNour.Frm
     public partial class frmMakeRecieve : DevExpress.XtraEditors.XtraForm
     {
         DatabaseConnection con;
+        DatabaseOperation oper;
         private readonly Fills fills = new Fills();
+        private bool isEditing = false;
+        private decimal boxWeight = 0;
+        private decimal palleteWeight = 0;
+        private decimal boxCount = 0;
+        private decimal discountWeight = 0;
         public frmMakeRecieve()
         {
             InitializeComponent();
             con = new DatabaseConnection(Connections.Constr);
+            oper = new DatabaseOperation(con);
             LoadData();
+            timer1.Start();
         }
         private void LoadData()
         {
@@ -181,7 +189,7 @@ namespace ELNour.Frm
             currentRow.Cells[20].Value = row["OperationDate"];
             currentRow.Cells[21].Value = row["UserName"];
         }
-        private void Changed (object sender, EventArgs e)
+        private void Changed(object sender, EventArgs e)
         {
             try
             {
@@ -272,12 +280,167 @@ namespace ELNour.Frm
                 // عرض النموذج
                 frm.ShowDialog();
             }
-            catch(Exception ex) { MyBox.Show($"خطأ غير متوقع :{Environment.NewLine} تفاصيل الخطأ : {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            catch (Exception ex) { MyBox.Show($"خطأ غير متوقع :{Environment.NewLine} تفاصيل الخطأ : {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error); }
         }
 
         private void btnMakeReceive_Click(object sender, EventArgs e)
         {
             MakeReceive();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            Search();
+        }
+
+        private void dgvOperation_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 18)
+            {
+                if(!UserPermission.DeleteMakeReceive)
+                {
+                    MyBox.Show("غير مسموح بالحذف حالياً", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                timer1.Stop();
+                DialogResult result = MyBox.Show("هل تريد حذف هذه العملية", "تنبيه", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (result == DialogResult.Yes)
+                {
+                    int operationId = Convert.ToInt32(dgvOperation.Rows[e.RowIndex].Cells[19].Value);
+                    string query = $"DELETE FROM Operation_tbl WHERE Id = {operationId}";
+                    using (SqlCommand command = new SqlCommand(query, con.Connection))
+                    {
+                        if (con.Connection.State == ConnectionState.Closed) { con.OpenConnection(); }
+                        command.ExecuteNonQuery();
+                        MyBox.Show("تم الحذف بنجاح", "تم الحذف", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        Search();
+                    }
+                }
+                timer1.Start();
+            }
+        }
+        private void Column1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
+            {
+                e.Handled = true;
+            }
+            if (e.KeyChar == '.' && (sender as TextBox).Text.IndexOf('.') > -1)
+            {
+                e.Handled = true;
+            }
+        }
+        private void dgvOperation_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            try
+            {
+                e.Control.KeyPress -= new KeyPressEventHandler(Column1_KeyPress);
+                if (dgvOperation.CurrentCell.ColumnIndex == 5 || dgvOperation.CurrentCell.ColumnIndex == 6 || dgvOperation.CurrentCell.ColumnIndex == 8 || dgvOperation.CurrentCell.ColumnIndex == 10)
+                {
+                    TextBox tb = e.Control as TextBox;
+                    if (tb != null)
+                    {
+                        tb.KeyPress += new KeyPressEventHandler(Column1_KeyPress);
+                    }
+                }
+            }
+            catch { }
+        }
+        private void dgvOperation_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+
+        }
+
+        private void dgvOperation_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            if (dgvOperation.CurrentCell.ColumnIndex == 5)
+            {
+                if (!UserPermission.EditMakeReceive) // allowEdit هي متغير يحدد إذا كان مسموحاً بالتعديل أم لا
+                {
+                    e.Cancel = true; // إلغاء عملية التعديل
+                    MyBox.Show("غير مسموح بالتعديل حالياً", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                boxCount = Convert.ToDecimal(dgvOperation.CurrentRow.Cells[5].Value);
+            }
+            else if (dgvOperation.CurrentCell.ColumnIndex == 6)
+            {
+                if (!UserPermission.EditMakeReceive) // allowEdit هي متغير يحدد إذا كان مسموحاً بالتعديل أم لا
+                {
+                    e.Cancel = true; // إلغاء عملية التعديل
+                    MyBox.Show("غير مسموح بالتعديل حالياً", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                boxWeight = Convert.ToDecimal(dgvOperation.CurrentRow.Cells[6].Value);
+            }
+            else if (dgvOperation.CurrentCell.ColumnIndex == 8)
+            {
+                if (!UserPermission.EditMakeReceive) // allowEdit هي متغير يحدد إذا كان مسموحاً بالتعديل أم لا
+                {
+                    e.Cancel = true; // إلغاء عملية التعديل
+                    MyBox.Show("غير مسموح بالتعديل حالياً", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                palleteWeight = Convert.ToDecimal(dgvOperation.CurrentRow.Cells[8].Value);
+            }
+            else if (dgvOperation.CurrentCell.ColumnIndex == 10)
+            {
+                if (!UserPermission.EditMakeReceive) // allowEdit هي متغير يحدد إذا كان مسموحاً بالتعديل أم لا
+                {
+                    e.Cancel = true; // إلغاء عملية التعديل
+                    MyBox.Show("غير مسموح بالتعديل حالياً", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                discountWeight = Convert.ToDecimal(dgvOperation.CurrentRow.Cells[10].Value);
+            }
+            if (!isEditing)
+            {
+                timer1.Stop();
+                isEditing = true;
+            }
+        }
+
+        private void dgvOperation_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            var currentRow = dgvOperation.CurrentRow;
+            if (dgvOperation.CurrentCell.ColumnIndex == 5 || dgvOperation.CurrentCell.ColumnIndex == 6 || dgvOperation.CurrentCell.ColumnIndex == 8 || dgvOperation.CurrentCell.ColumnIndex == 10)
+            {
+                currentRow.Cells[9].Value = (Convert.ToDecimal(currentRow.Cells[5].Value) * Convert.ToDecimal(currentRow.Cells[6].Value));
+                currentRow.Cells[11].Value = (Convert.ToDecimal(currentRow.Cells[8].Value) + Convert.ToDecimal(currentRow.Cells[9].Value) + Convert.ToDecimal(currentRow.Cells[10].Value));
+                currentRow.Cells[12].Value = (Convert.ToDecimal(currentRow.Cells[7].Value) - Convert.ToDecimal(currentRow.Cells[11].Value));
+                Calc_Inv();
+            }
+            UpdateOperation(currentRow);
+            timer1.Start();
+        }
+        private void UpdateOperation(DataGridViewRow row)
+        {
+            try
+            {
+                if (con.Connection.State == ConnectionState.Closed) { con.OpenConnection(); }
+                   
+                Dictionary<string, object> UpdateOperation = new Dictionary<string, object>
+                {
+                    {"BoxesCount",Convert.ToDecimal(row.Cells[5].Value) },
+                    {"BoxWeight",Convert.ToDecimal(row.Cells[6].Value) },
+                    {"PalleteWeight",Convert.ToDecimal(row.Cells[8].Value) },
+                    {"BoxesWeight",Convert.ToDecimal(row.Cells[9].Value) },
+                    {"DiscountWeight",Convert.ToDecimal(row.Cells[10].Value) },
+                    {"TotalDiscount",Convert.ToDecimal(row.Cells[11].Value) },
+                    {"NetWeight",Convert.ToDecimal(row.Cells[12].Value) },
+                };
+                oper.Update("Operation_tbl", UpdateOperation, $"Id = {Convert.ToInt32(row.Cells[19].Value)}");
+            }
+            catch (Exception ex)
+            {
+                MyBox.Show($"خطأ غير متوقع :{Environment.NewLine} تفاصيل الخطأ : {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                con.CloseConnection();
+                isEditing = false;
+                timer1.Start();
+            }
         }
     }
 }

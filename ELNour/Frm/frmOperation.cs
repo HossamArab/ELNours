@@ -117,8 +117,8 @@ namespace ELNour.Frm
             }
             fills.fillComboBox(cmbItems, "Product_tbl", "Id", "Name");
             fills.fillComboBox(cmbVendor, "Vendor_tbl", "Id", "Name","Type", vendorType);
-            cmbItems.SelectedValue = 0;
-            cmbVendor.SelectedValue = 0;
+            cmbItems.SelectedIndex = -1;
+            cmbVendor.SelectedIndex = -1;
             txtUser.Text = User.FullName;
             txtQA.Text = "";
             txtNotes.Text = "";
@@ -129,12 +129,13 @@ namespace ELNour.Frm
         }
         private void Refill()
         {
+            cmbItems.SelectedIndex = -1;
             txtUser.Text = User.FullName;
             txtQA.Text = "";
             txtNotes.Text = "";
-            txtCountBoxes.Text = "0";
-            txtBoxesWeight.Text = "0";
-            txtDiscountWeight.Text = "0";
+            txtCountBoxes.Text = "";
+            txtBoxesWeight.Text = "";
+            txtDiscountWeight.Text = "";
         }
             
         private void txtpress(object sender, KeyPressEventArgs e) // Make TextBoxes Don't Accept Chars Only Number Or Decimal
@@ -150,29 +151,42 @@ namespace ELNour.Frm
         }
         private void SumInPanel1() // Sum NetWeight
         {
+            decimal Weight = 0;
+            decimal BoxWeight = 0;
+            decimal BoxCount = 0;
+            decimal BoxesWeight = 0;
+            decimal PlateWeight = 0;
+            decimal DiscountWeight = 0;
+            decimal TotalDiscount = 0;
+            decimal NetWeight = 0;
+            if (txtBoxWeight.Text != "")
+            {
+                BoxWeight = decimal.Parse(txtBoxWeight.Text);
+            }
+            if (txtCountBoxes.Text != "")
+            {
+                BoxCount = decimal.Parse(txtCountBoxes.Text);
+            }
+            if (txtPlateWeight.Text != "")
+            {
+                PlateWeight = decimal.Parse(txtPlateWeight.Text);
+            }
+            if (txtDiscountWeight.Text != "")
+            {
+                DiscountWeight = decimal.Parse(txtDiscountWeight.Text);
+            }
             txtWeight.Text = lblMainWeight.Text;
-            txtBoxesWeight.Text = (Convert.ToDecimal(txtBoxWeight.Text) * Convert.ToDecimal(txtCountBoxes.Text)).ToString();
-            txtTotalDiscount.Text = (Convert.ToDecimal(txtBoxesWeight.Text) + Convert.ToDecimal(txtPlateWeight.Text) + Convert.ToDecimal(txtDiscountWeight.Text)).ToString();
-            lblNetWeight.Text = (Convert.ToDecimal(txtWeight.Text) - Convert.ToDecimal(txtTotalDiscount.Text)).ToString();
+            Weight = Convert.ToDecimal(txtWeight.Text);
+            BoxesWeight = BoxWeight * BoxCount;
+            txtBoxesWeight.Text = (BoxesWeight).ToString();
+            TotalDiscount = (BoxesWeight + PlateWeight + DiscountWeight);
+            txtTotalDiscount.Text = TotalDiscount.ToString();
+            NetWeight = Weight - TotalDiscount;
+            lblNetWeight.Text = NetWeight.ToString();
         }
         private void WeightChanged(object sender, EventArgs e) // WeightChanged
         {
-            if (txtBoxWeight.Text == "")
-            {
-                txtBoxWeight.Text = "0";
-            }
-            if (txtCountBoxes.Text == "")
-            {
-                txtCountBoxes.Text = "0";
-            }
-            if (txtPlateWeight.Text == "")
-            {
-                txtPlateWeight.Text = "0";
-            }
-            if (txtDiscountWeight.Text == "")
-            {
-                txtDiscountWeight.Text = "0";
-            }
+            
             SumInPanel1();
         }
 
@@ -214,17 +228,17 @@ namespace ELNour.Frm
                     {"OperationDate",DateTime.Now },
                     {"VendorId",Convert.ToInt32(cmbVendor.SelectedValue) },
                     {"ProductId",Convert.ToInt32(cmbItems.SelectedValue) },
-                    {"BoxesCount",int.Parse(txtCountBoxes.Text) },
-                    {"PalleteWeight",Convert.ToDecimal(txtPlateWeight.Text) },
-                    {"BoxWeight",Convert.ToDecimal(txtBoxWeight.Text) },
-                    {"BoxesWeight",Convert.ToDecimal(txtBoxesWeight.Text) },
+                    {"BoxesCount",GetDecimalValue(txtCountBoxes.Text) },
+                    {"PalleteWeight",GetDecimalValue(txtPlateWeight.Text) },
+                    {"BoxWeight",GetDecimalValue(txtBoxWeight.Text) },
+                    {"BoxesWeight",GetDecimalValue(txtBoxesWeight.Text) },
                     {"QA",txtQA.Text },
                     {"UserId",User.UserID },
                     {"Notes",txtNotes.Text },
-                    {"Weight",Convert.ToDecimal(txtWeight.Text) },
-                    {"DiscountWeight",Convert.ToDecimal(txtDiscountWeight.Text) },
-                    {"TotalDiscount",Convert.ToDecimal(txtTotalDiscount.Text) },
-                    {"NetWeight",Convert.ToDecimal(lblNetWeight.Text) },
+                    {"Weight",GetDecimalValue(txtWeight.Text) },
+                    {"DiscountWeight",GetDecimalValue(txtDiscountWeight.Text) },
+                    {"TotalDiscount",GetDecimalValue(txtTotalDiscount.Text) },
+                    {"NetWeight",GetDecimalValue(lblNetWeight.Text) },
                 };
                 if (con.Connection.State == ConnectionState.Closed)
                     con.Connection.Open();
@@ -236,7 +250,14 @@ namespace ELNour.Frm
             catch (Exception exe) { MyBox.Show($"خطأ غير متوقع :{Environment.NewLine} تفاصيل الخطأ : {exe.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error); }
 
         }
+        decimal GetDecimalValue(object value)
+        {
+            if (value == null || string.IsNullOrEmpty(value.ToString()))
+                return 0;
 
+            decimal.TryParse(value.ToString(), out decimal result);
+            return result;
+        }
         private void btnSave_Click(object sender, EventArgs e)
         {
             Save();

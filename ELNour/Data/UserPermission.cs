@@ -40,6 +40,8 @@ namespace ELNour.Data
         public static bool Operation { get; set; } = false;
         public static bool OutOperation { get; set; } = false;
         public static bool MakeReceive { get; set; } = false;
+        public static bool EditMakeReceive { get; set; } = false;
+        public static bool DeleteMakeReceive { get; set; } = false;
         public static bool ManageRecieve { get; set; } = false;
         public static bool ManageSupply { get; set; } = false;
         public static bool AllOperations { get; set; } = false;

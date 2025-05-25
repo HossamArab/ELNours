@@ -170,7 +170,6 @@
             this.txtBoxWeight.Name = "txtBoxWeight";
             this.txtBoxWeight.Size = new System.Drawing.Size(232, 26);
             this.txtBoxWeight.TabIndex = 25;
-            this.txtBoxWeight.Text = "0";
             this.txtBoxWeight.TextChanged += new System.EventHandler(this.WeightChanged);
             this.txtBoxWeight.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtpress);
             // 
@@ -255,7 +254,6 @@
             this.txtCountBoxes.Name = "txtCountBoxes";
             this.txtCountBoxes.Size = new System.Drawing.Size(216, 26);
             this.txtCountBoxes.TabIndex = 13;
-            this.txtCountBoxes.Text = "0";
             this.txtCountBoxes.TextChanged += new System.EventHandler(this.WeightChanged);
             this.txtCountBoxes.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtpress);
             // 
@@ -486,7 +484,6 @@
             this.txtDiscountWeight.Name = "txtDiscountWeight";
             this.txtDiscountWeight.Size = new System.Drawing.Size(137, 30);
             this.txtDiscountWeight.TabIndex = 13;
-            this.txtDiscountWeight.Text = "0";
             this.txtDiscountWeight.TextChanged += new System.EventHandler(this.WeightChanged);
             this.txtDiscountWeight.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtpress);
             // 

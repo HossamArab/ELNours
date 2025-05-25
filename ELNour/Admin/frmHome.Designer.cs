@@ -62,6 +62,8 @@
             this.ribbonPage3 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup3 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup7 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.ribbonPageGroup8 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.btnProcess = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.popupMenu1)).BeginInit();
             this.SuspendLayout();
@@ -92,10 +94,11 @@
             this.btnNewYear,
             this.btnImportFromExcel,
             this.btnImportProduct,
-            this.btnImportImporter});
+            this.btnImportImporter,
+            this.btnProcess});
             this.ribbonControl1.Location = new System.Drawing.Point(0, 0);
             this.ribbonControl1.Margin = new System.Windows.Forms.Padding(4);
-            this.ribbonControl1.MaxItemId = 21;
+            this.ribbonControl1.MaxItemId = 22;
             this.ribbonControl1.Name = "ribbonControl1";
             this.ribbonControl1.OptionsMenuMinWidth = 385;
             this.ribbonControl1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
@@ -659,7 +662,8 @@
             // 
             this.ribbonPage2.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
             this.ribbonPageGroup2,
-            this.ribbonPageGroup5});
+            this.ribbonPageGroup5,
+            this.ribbonPageGroup8});
             this.ribbonPage2.Name = "ribbonPage2";
             this.ribbonPage2.Text = "العمليات";
             // 
@@ -695,6 +699,35 @@
             this.ribbonPageGroup7.ItemLinks.Add(this.btnImportFromExcel);
             this.ribbonPageGroup7.Name = "ribbonPageGroup7";
             this.ribbonPageGroup7.Visible = false;
+            // 
+            // ribbonPageGroup8
+            // 
+            this.ribbonPageGroup8.ItemLinks.Add(this.btnProcess);
+            this.ribbonPageGroup8.Name = "ribbonPageGroup8";
+            // 
+            // btnProcess
+            // 
+            this.btnProcess.Caption = "الانتاج";
+            this.btnProcess.Id = 21;
+            this.btnProcess.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnProcess.ImageOptions.Image")));
+            this.btnProcess.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnProcess.ImageOptions.LargeImage")));
+            this.btnProcess.ItemAppearance.Disabled.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnProcess.ItemAppearance.Disabled.Options.UseFont = true;
+            this.btnProcess.ItemAppearance.Disabled.Options.UseTextOptions = true;
+            this.btnProcess.ItemAppearance.Disabled.TextOptions.WordWrap = DevExpress.Utils.WordWrap.NoWrap;
+            this.btnProcess.ItemAppearance.Hovered.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnProcess.ItemAppearance.Hovered.Options.UseFont = true;
+            this.btnProcess.ItemAppearance.Hovered.Options.UseTextOptions = true;
+            this.btnProcess.ItemAppearance.Hovered.TextOptions.WordWrap = DevExpress.Utils.WordWrap.NoWrap;
+            this.btnProcess.ItemAppearance.Normal.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnProcess.ItemAppearance.Normal.Options.UseFont = true;
+            this.btnProcess.ItemAppearance.Normal.Options.UseTextOptions = true;
+            this.btnProcess.ItemAppearance.Normal.TextOptions.WordWrap = DevExpress.Utils.WordWrap.NoWrap;
+            this.btnProcess.ItemAppearance.Pressed.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnProcess.ItemAppearance.Pressed.Options.UseFont = true;
+            this.btnProcess.ItemAppearance.Pressed.Options.UseTextOptions = true;
+            this.btnProcess.ItemAppearance.Pressed.TextOptions.WordWrap = DevExpress.Utils.WordWrap.NoWrap;
+            this.btnProcess.Name = "btnProcess";
             // 
             // frmHome
             // 
@@ -752,6 +785,8 @@
         private DevExpress.XtraBars.PopupMenu popupMenu1;
         private DevExpress.XtraBars.BarButtonItem btnImportProduct;
         private DevExpress.XtraBars.BarButtonItem btnImportImporter;
+        private DevExpress.XtraBars.BarButtonItem btnProcess;
+        private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup8;
     }
 }
 

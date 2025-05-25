@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -52,6 +53,7 @@
             this.label17 = new System.Windows.Forms.Label();
             this.panelControl3 = new DevExpress.XtraEditors.PanelControl();
             this.dgvOperation = new System.Windows.Forms.DataGridView();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column1 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -328,7 +330,7 @@
             // dgvOperation
             // 
             this.dgvOperation.AllowUserToAddRows = false;
-            this.dgvOperation.AllowUserToDeleteRows = false;
+            this.dgvOperation.AllowUserToOrderColumns = true;
             this.dgvOperation.BackgroundColor = System.Drawing.Color.White;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.Navy;
@@ -376,11 +378,20 @@
             this.dgvOperation.EnableHeadersVisualStyles = false;
             this.dgvOperation.Location = new System.Drawing.Point(2, 2);
             this.dgvOperation.Name = "dgvOperation";
-            this.dgvOperation.ReadOnly = true;
             this.dgvOperation.RowHeadersVisible = false;
             this.dgvOperation.RowTemplate.Height = 30;
             this.dgvOperation.Size = new System.Drawing.Size(1274, 493);
             this.dgvOperation.TabIndex = 1;
+            this.dgvOperation.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dgvOperation_CellBeginEdit);
+            this.dgvOperation.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvOperation_CellClick);
+            this.dgvOperation.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvOperation_CellEndEdit);
+            this.dgvOperation.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvOperation_DataError);
+            this.dgvOperation.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dgvOperation_EditingControlShowing);
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 10000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // Column2
             // 
@@ -395,7 +406,6 @@
             // 
             this.Column1.HeaderText = "";
             this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
             this.Column1.Width = 50;
             // 
             // Column3
@@ -428,7 +438,6 @@
             // 
             this.Column4.HeaderText = "عدد الصناديق";
             this.Column4.Name = "Column4";
-            this.Column4.ReadOnly = true;
             this.Column4.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.Column4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
@@ -436,7 +445,6 @@
             // 
             this.Column17.HeaderText = "وزن الصندوق";
             this.Column17.Name = "Column17";
-            this.Column17.ReadOnly = true;
             // 
             // Column7
             // 
@@ -450,7 +458,6 @@
             // 
             this.Column21.HeaderText = "خصم الباليتة";
             this.Column21.Name = "Column21";
-            this.Column21.ReadOnly = true;
             this.Column21.Width = 150;
             // 
             // Column22
@@ -464,7 +471,6 @@
             // 
             this.Column8.HeaderText = "خصم اضافي";
             this.Column8.Name = "Column8";
-            this.Column8.ReadOnly = true;
             this.Column8.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.Column8.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.Column8.Width = 150;
@@ -537,7 +543,6 @@
             this.Column14.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Column14.HeaderText = "حذف";
             this.Column14.Name = "Column14";
-            this.Column14.ReadOnly = true;
             this.Column14.Text = "-";
             // 
             // Column16
@@ -614,6 +619,7 @@
         private System.Windows.Forms.Label lblTotalPrice;
         private System.Windows.Forms.Label label17;
         private DevExpress.XtraEditors.SimpleButton btnMakeReceive;
+        private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
