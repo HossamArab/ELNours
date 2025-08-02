@@ -174,5 +174,10 @@ namespace ELNour
         {
             new frmImportImprter().Show();
         }
+
+        private void btnProcess_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            new frmProcess().Show();
+        }
     }
 }

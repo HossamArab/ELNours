@@ -52,6 +52,7 @@
             this.popupMenu1 = new DevExpress.XtraBars.PopupMenu(this.components);
             this.btnImportProduct = new DevExpress.XtraBars.BarButtonItem();
             this.btnImportImporter = new DevExpress.XtraBars.BarButtonItem();
+            this.btnProcess = new DevExpress.XtraBars.BarButtonItem();
             this.ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup4 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
@@ -59,11 +60,10 @@
             this.ribbonPage2 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup5 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.ribbonPageGroup8 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPage3 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup3 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup7 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            this.ribbonPageGroup8 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            this.btnProcess = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.popupMenu1)).BeginInit();
             this.SuspendLayout();
@@ -627,6 +627,31 @@
             this.btnImportImporter.Name = "btnImportImporter";
             this.btnImportImporter.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnImportImporter_ItemClick);
             // 
+            // btnProcess
+            // 
+            this.btnProcess.Caption = "الانتاج";
+            this.btnProcess.Id = 21;
+            this.btnProcess.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnProcess.ImageOptions.Image")));
+            this.btnProcess.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnProcess.ImageOptions.LargeImage")));
+            this.btnProcess.ItemAppearance.Disabled.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnProcess.ItemAppearance.Disabled.Options.UseFont = true;
+            this.btnProcess.ItemAppearance.Disabled.Options.UseTextOptions = true;
+            this.btnProcess.ItemAppearance.Disabled.TextOptions.WordWrap = DevExpress.Utils.WordWrap.NoWrap;
+            this.btnProcess.ItemAppearance.Hovered.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnProcess.ItemAppearance.Hovered.Options.UseFont = true;
+            this.btnProcess.ItemAppearance.Hovered.Options.UseTextOptions = true;
+            this.btnProcess.ItemAppearance.Hovered.TextOptions.WordWrap = DevExpress.Utils.WordWrap.NoWrap;
+            this.btnProcess.ItemAppearance.Normal.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnProcess.ItemAppearance.Normal.Options.UseFont = true;
+            this.btnProcess.ItemAppearance.Normal.Options.UseTextOptions = true;
+            this.btnProcess.ItemAppearance.Normal.TextOptions.WordWrap = DevExpress.Utils.WordWrap.NoWrap;
+            this.btnProcess.ItemAppearance.Pressed.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnProcess.ItemAppearance.Pressed.Options.UseFont = true;
+            this.btnProcess.ItemAppearance.Pressed.Options.UseTextOptions = true;
+            this.btnProcess.ItemAppearance.Pressed.TextOptions.WordWrap = DevExpress.Utils.WordWrap.NoWrap;
+            this.btnProcess.Name = "btnProcess";
+            this.btnProcess.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnProcess_ItemClick);
+            // 
             // ribbonPage1
             // 
             this.ribbonPage1.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
@@ -680,6 +705,11 @@
             this.ribbonPageGroup5.ItemLinks.Add(this.btnManageSupply);
             this.ribbonPageGroup5.Name = "ribbonPageGroup5";
             // 
+            // ribbonPageGroup8
+            // 
+            this.ribbonPageGroup8.ItemLinks.Add(this.btnProcess);
+            this.ribbonPageGroup8.Name = "ribbonPageGroup8";
+            // 
             // ribbonPage3
             // 
             this.ribbonPage3.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
@@ -699,35 +729,6 @@
             this.ribbonPageGroup7.ItemLinks.Add(this.btnImportFromExcel);
             this.ribbonPageGroup7.Name = "ribbonPageGroup7";
             this.ribbonPageGroup7.Visible = false;
-            // 
-            // ribbonPageGroup8
-            // 
-            this.ribbonPageGroup8.ItemLinks.Add(this.btnProcess);
-            this.ribbonPageGroup8.Name = "ribbonPageGroup8";
-            // 
-            // btnProcess
-            // 
-            this.btnProcess.Caption = "الانتاج";
-            this.btnProcess.Id = 21;
-            this.btnProcess.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnProcess.ImageOptions.Image")));
-            this.btnProcess.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnProcess.ImageOptions.LargeImage")));
-            this.btnProcess.ItemAppearance.Disabled.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
-            this.btnProcess.ItemAppearance.Disabled.Options.UseFont = true;
-            this.btnProcess.ItemAppearance.Disabled.Options.UseTextOptions = true;
-            this.btnProcess.ItemAppearance.Disabled.TextOptions.WordWrap = DevExpress.Utils.WordWrap.NoWrap;
-            this.btnProcess.ItemAppearance.Hovered.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
-            this.btnProcess.ItemAppearance.Hovered.Options.UseFont = true;
-            this.btnProcess.ItemAppearance.Hovered.Options.UseTextOptions = true;
-            this.btnProcess.ItemAppearance.Hovered.TextOptions.WordWrap = DevExpress.Utils.WordWrap.NoWrap;
-            this.btnProcess.ItemAppearance.Normal.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
-            this.btnProcess.ItemAppearance.Normal.Options.UseFont = true;
-            this.btnProcess.ItemAppearance.Normal.Options.UseTextOptions = true;
-            this.btnProcess.ItemAppearance.Normal.TextOptions.WordWrap = DevExpress.Utils.WordWrap.NoWrap;
-            this.btnProcess.ItemAppearance.Pressed.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
-            this.btnProcess.ItemAppearance.Pressed.Options.UseFont = true;
-            this.btnProcess.ItemAppearance.Pressed.Options.UseTextOptions = true;
-            this.btnProcess.ItemAppearance.Pressed.TextOptions.WordWrap = DevExpress.Utils.WordWrap.NoWrap;
-            this.btnProcess.Name = "btnProcess";
             // 
             // frmHome
             // 

@@ -298,6 +298,12 @@
     <Compile Include="Frm\frmPerMissions.Designer.cs">
       <DependentUpon>frmPerMissions.cs</DependentUpon>
     </Compile>
+    <Compile Include="Frm\frmProcess.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frm\frmProcess.Designer.cs">
+      <DependentUpon>frmProcess.cs</DependentUpon>
+    </Compile>
     <Compile Include="Frm\frmProduct.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -385,6 +391,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Frm\frmPerMissions.resx">
       <DependentUpon>frmPerMissions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frm\frmProcess.resx">
+      <DependentUpon>frmProcess.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Frm\frmProduct.resx">
       <DependentUpon>frmProduct.cs</DependentUpon>

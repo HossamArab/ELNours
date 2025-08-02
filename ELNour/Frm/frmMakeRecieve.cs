@@ -228,7 +228,6 @@ namespace ELNour.Frm
 
                 // استخدام Dictionary للتحقق من وجود عميل واحد فقط للفاتورة
                 Dictionary<int, bool> customerCheck = new Dictionary<int, bool>();
-
                 foreach (DataGridViewRow row in rows)
                 {
                     // التحقق مما إذا كان الصف محددًا
