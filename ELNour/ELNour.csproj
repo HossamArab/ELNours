@@ -262,6 +262,12 @@
     <Compile Include="Frm\frmAllOperation.Designer.cs">
       <DependentUpon>frmAllOperation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Frm\frmAllProcess.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frm\frmAllProcess.Designer.cs">
+      <DependentUpon>frmAllProcess.cs</DependentUpon>
+    </Compile>
     <Compile Include="Frm\frmCustomer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -373,6 +379,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Frm\frmAllOperation.resx">
       <DependentUpon>frmAllOperation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frm\frmAllProcess.resx">
+      <DependentUpon>frmAllProcess.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Frm\frmCustomer.resx">
       <DependentUpon>frmCustomer.cs</DependentUpon>
@@ -487,6 +496,8 @@
   <ItemGroup>
     <Content Include="Alecive-Flatwoken-Apps-Google-Earth.ico" />
     <Content Include="Franksouza183-Fs-Apps-workspace-switcher.ico" />
+    <None Include="Resources\pagesetup_16x16.png" />
+    <None Include="Resources\pagesetup_32x32.png" />
     <None Include="Resources\LogOut.png" />
     <None Include="Resources\Login_32.png" />
     <None Include="Resources\community_users_12977.png" />

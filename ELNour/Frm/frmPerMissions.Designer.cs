@@ -48,6 +48,10 @@
             this.chkBackUp = new DevExpress.XtraEditors.CheckEdit();
             this.chkAllOperations = new DevExpress.XtraEditors.CheckEdit();
             this.groupControl2 = new DevExpress.XtraEditors.GroupControl();
+            this.checkEdit2 = new DevExpress.XtraEditors.CheckEdit();
+            this.checkEdit1 = new DevExpress.XtraEditors.CheckEdit();
+            this.chkDeleteMakeReceive = new DevExpress.XtraEditors.CheckEdit();
+            this.chkEditMakeReceive = new DevExpress.XtraEditors.CheckEdit();
             this.chkManageSupply = new DevExpress.XtraEditors.CheckEdit();
             this.chkManageRecieve = new DevExpress.XtraEditors.CheckEdit();
             this.chkMakeReceive = new DevExpress.XtraEditors.CheckEdit();
@@ -87,8 +91,7 @@
             this.chkEditVendor = new DevExpress.XtraEditors.CheckEdit();
             this.chkAddVendor = new DevExpress.XtraEditors.CheckEdit();
             this.chkVendor = new DevExpress.XtraEditors.CheckEdit();
-            this.chkEditMakeReceive = new DevExpress.XtraEditors.CheckEdit();
-            this.chkDeleteMakeReceive = new DevExpress.XtraEditors.CheckEdit();
+            this.chkAllProcess = new DevExpress.XtraEditors.CheckEdit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chkConfimPassword.Properties)).BeginInit();
@@ -107,6 +110,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.chkAllOperations.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl2)).BeginInit();
             this.groupControl2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEdit2.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEdit1.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chkDeleteMakeReceive.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chkEditMakeReceive.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chkManageSupply.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chkManageRecieve.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chkMakeReceive.Properties)).BeginInit();
@@ -151,8 +158,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.chkEditVendor.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chkAddVendor.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chkVendor.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chkEditMakeReceive.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chkDeleteMakeReceive.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chkAllProcess.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // panelControl1
@@ -399,6 +405,7 @@
             // 
             // groupControl3
             // 
+            this.groupControl3.Controls.Add(this.chkAllProcess);
             this.groupControl3.Controls.Add(this.chkRestoreBackup);
             this.groupControl3.Controls.Add(this.chkBackUp);
             this.groupControl3.Controls.Add(this.chkAllOperations);
@@ -447,6 +454,8 @@
             // 
             // groupControl2
             // 
+            this.groupControl2.Controls.Add(this.checkEdit2);
+            this.groupControl2.Controls.Add(this.checkEdit1);
             this.groupControl2.Controls.Add(this.chkDeleteMakeReceive);
             this.groupControl2.Controls.Add(this.chkEditMakeReceive);
             this.groupControl2.Controls.Add(this.chkManageSupply);
@@ -460,6 +469,54 @@
             this.groupControl2.Size = new System.Drawing.Size(277, 490);
             this.groupControl2.TabIndex = 2;
             this.groupControl2.Text = "العمليات";
+            // 
+            // checkEdit2
+            // 
+            this.checkEdit2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.checkEdit2.Location = new System.Drawing.Point(2, 182);
+            this.checkEdit2.Name = "checkEdit2";
+            this.checkEdit2.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkEdit2.Properties.Appearance.Options.UseFont = true;
+            this.checkEdit2.Properties.Caption = "تعديل قيم الانتاج";
+            this.checkEdit2.Size = new System.Drawing.Size(273, 20);
+            this.checkEdit2.TabIndex = 57;
+            this.checkEdit2.Tag = "EditProcess";
+            // 
+            // checkEdit1
+            // 
+            this.checkEdit1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.checkEdit1.Location = new System.Drawing.Point(2, 162);
+            this.checkEdit1.Name = "checkEdit1";
+            this.checkEdit1.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkEdit1.Properties.Appearance.Options.UseFont = true;
+            this.checkEdit1.Properties.Caption = "الانتاج";
+            this.checkEdit1.Size = new System.Drawing.Size(273, 20);
+            this.checkEdit1.TabIndex = 56;
+            this.checkEdit1.Tag = "Process";
+            // 
+            // chkDeleteMakeReceive
+            // 
+            this.chkDeleteMakeReceive.Dock = System.Windows.Forms.DockStyle.Top;
+            this.chkDeleteMakeReceive.Location = new System.Drawing.Point(2, 142);
+            this.chkDeleteMakeReceive.Name = "chkDeleteMakeReceive";
+            this.chkDeleteMakeReceive.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkDeleteMakeReceive.Properties.Appearance.Options.UseFont = true;
+            this.chkDeleteMakeReceive.Properties.Caption = "حذف الإذون";
+            this.chkDeleteMakeReceive.Size = new System.Drawing.Size(273, 20);
+            this.chkDeleteMakeReceive.TabIndex = 55;
+            this.chkDeleteMakeReceive.Tag = "DeleteMakeReceive";
+            // 
+            // chkEditMakeReceive
+            // 
+            this.chkEditMakeReceive.Dock = System.Windows.Forms.DockStyle.Top;
+            this.chkEditMakeReceive.Location = new System.Drawing.Point(2, 122);
+            this.chkEditMakeReceive.Name = "chkEditMakeReceive";
+            this.chkEditMakeReceive.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkEditMakeReceive.Properties.Appearance.Options.UseFont = true;
+            this.chkEditMakeReceive.Properties.Caption = "تعديل الإذون";
+            this.chkEditMakeReceive.Size = new System.Drawing.Size(273, 20);
+            this.chkEditMakeReceive.TabIndex = 54;
+            this.chkEditMakeReceive.Tag = "EditMakeReceive";
             // 
             // chkManageSupply
             // 
@@ -919,29 +976,17 @@
             this.chkVendor.TabIndex = 48;
             this.chkVendor.Tag = "Vendor";
             // 
-            // chkEditMakeReceive
+            // chkAllProcess
             // 
-            this.chkEditMakeReceive.Dock = System.Windows.Forms.DockStyle.Top;
-            this.chkEditMakeReceive.Location = new System.Drawing.Point(2, 122);
-            this.chkEditMakeReceive.Name = "chkEditMakeReceive";
-            this.chkEditMakeReceive.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkEditMakeReceive.Properties.Appearance.Options.UseFont = true;
-            this.chkEditMakeReceive.Properties.Caption = "تعديل الإذون";
-            this.chkEditMakeReceive.Size = new System.Drawing.Size(273, 20);
-            this.chkEditMakeReceive.TabIndex = 54;
-            this.chkEditMakeReceive.Tag = "EditMakeReceive";
-            // 
-            // chkDeleteMakeReceive
-            // 
-            this.chkDeleteMakeReceive.Dock = System.Windows.Forms.DockStyle.Top;
-            this.chkDeleteMakeReceive.Location = new System.Drawing.Point(2, 142);
-            this.chkDeleteMakeReceive.Name = "chkDeleteMakeReceive";
-            this.chkDeleteMakeReceive.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkDeleteMakeReceive.Properties.Appearance.Options.UseFont = true;
-            this.chkDeleteMakeReceive.Properties.Caption = "حذف الإذون";
-            this.chkDeleteMakeReceive.Size = new System.Drawing.Size(273, 20);
-            this.chkDeleteMakeReceive.TabIndex = 55;
-            this.chkDeleteMakeReceive.Tag = "DeleteMakeReceive";
+            this.chkAllProcess.Dock = System.Windows.Forms.DockStyle.Top;
+            this.chkAllProcess.Location = new System.Drawing.Point(2, 82);
+            this.chkAllProcess.Name = "chkAllProcess";
+            this.chkAllProcess.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkAllProcess.Properties.Appearance.Options.UseFont = true;
+            this.chkAllProcess.Properties.Caption = "تقرير الانتاج";
+            this.chkAllProcess.Size = new System.Drawing.Size(273, 20);
+            this.chkAllProcess.TabIndex = 52;
+            this.chkAllProcess.Tag = "AllProcess";
             // 
             // frmPerMissions
             // 
@@ -977,6 +1022,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.chkAllOperations.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl2)).EndInit();
             this.groupControl2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.checkEdit2.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEdit1.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chkDeleteMakeReceive.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chkEditMakeReceive.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chkManageSupply.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chkManageRecieve.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chkMakeReceive.Properties)).EndInit();
@@ -1021,8 +1070,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.chkEditVendor.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chkAddVendor.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chkVendor.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chkEditMakeReceive.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chkDeleteMakeReceive.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chkAllProcess.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1089,5 +1137,8 @@
         private DevExpress.XtraEditors.SimpleButton btnSave;
         private DevExpress.XtraEditors.CheckEdit chkDeleteMakeReceive;
         private DevExpress.XtraEditors.CheckEdit chkEditMakeReceive;
+        private DevExpress.XtraEditors.CheckEdit checkEdit2;
+        private DevExpress.XtraEditors.CheckEdit checkEdit1;
+        private DevExpress.XtraEditors.CheckEdit chkAllProcess;
     }
 }

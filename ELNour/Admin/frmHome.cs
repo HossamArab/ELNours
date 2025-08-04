@@ -104,6 +104,8 @@ namespace ELNour
             btnAllOperation.Enabled = UserPermission.AllOperations;
             btnManageRecieve.Enabled = UserPermission.ManageRecieve;
             btnManageSupply.Enabled = UserPermission.ManageSupply;
+            btnProcess.Enabled = UserPermission.Process;
+            btnAllProcess.Enabled = UserPermission.AllProcess;
         }
 
         private void btnLogin_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -178,6 +180,11 @@ namespace ELNour
         private void btnProcess_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             new frmProcess().Show();
+        }
+
+        private void btnAllProcess_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            new frmAllProcess().Show();
         }
     }
 }

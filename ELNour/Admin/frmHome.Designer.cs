@@ -53,6 +53,7 @@
             this.btnImportProduct = new DevExpress.XtraBars.BarButtonItem();
             this.btnImportImporter = new DevExpress.XtraBars.BarButtonItem();
             this.btnProcess = new DevExpress.XtraBars.BarButtonItem();
+            this.btnAllProcess = new DevExpress.XtraBars.BarButtonItem();
             this.ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup4 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
@@ -95,10 +96,11 @@
             this.btnImportFromExcel,
             this.btnImportProduct,
             this.btnImportImporter,
-            this.btnProcess});
+            this.btnProcess,
+            this.btnAllProcess});
             this.ribbonControl1.Location = new System.Drawing.Point(0, 0);
             this.ribbonControl1.Margin = new System.Windows.Forms.Padding(4);
-            this.ribbonControl1.MaxItemId = 22;
+            this.ribbonControl1.MaxItemId = 23;
             this.ribbonControl1.Name = "ribbonControl1";
             this.ribbonControl1.OptionsMenuMinWidth = 385;
             this.ribbonControl1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
@@ -652,6 +654,32 @@
             this.btnProcess.Name = "btnProcess";
             this.btnProcess.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnProcess_ItemClick);
             // 
+            // btnAllProcess
+            // 
+            this.btnAllProcess.Caption = "تقرير الانتاج";
+            this.btnAllProcess.Id = 22;
+            this.btnAllProcess.ImageOptions.Image = global::ELNour.Properties.Resources.pagesetup_16x16;
+            this.btnAllProcess.ImageOptions.LargeImage = global::ELNour.Properties.Resources.pagesetup_32x32;
+            this.btnAllProcess.ItemAppearance.Disabled.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnAllProcess.ItemAppearance.Disabled.Options.UseFont = true;
+            this.btnAllProcess.ItemAppearance.Disabled.Options.UseTextOptions = true;
+            this.btnAllProcess.ItemAppearance.Disabled.TextOptions.WordWrap = DevExpress.Utils.WordWrap.NoWrap;
+            this.btnAllProcess.ItemAppearance.Hovered.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnAllProcess.ItemAppearance.Hovered.Options.UseFont = true;
+            this.btnAllProcess.ItemAppearance.Hovered.Options.UseTextOptions = true;
+            this.btnAllProcess.ItemAppearance.Hovered.TextOptions.WordWrap = DevExpress.Utils.WordWrap.NoWrap;
+            this.btnAllProcess.ItemAppearance.Normal.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnAllProcess.ItemAppearance.Normal.Options.UseFont = true;
+            this.btnAllProcess.ItemAppearance.Normal.Options.UseTextOptions = true;
+            this.btnAllProcess.ItemAppearance.Normal.TextOptions.WordWrap = DevExpress.Utils.WordWrap.NoWrap;
+            this.btnAllProcess.ItemAppearance.Pressed.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnAllProcess.ItemAppearance.Pressed.Options.UseFont = true;
+            this.btnAllProcess.ItemAppearance.Pressed.Options.UseTextOptions = true;
+            this.btnAllProcess.ItemAppearance.Pressed.TextOptions.WordWrap = DevExpress.Utils.WordWrap.NoWrap;
+            this.btnAllProcess.Name = "btnAllProcess";
+            this.btnAllProcess.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
+            this.btnAllProcess.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnAllProcess_ItemClick);
+            // 
             // ribbonPage1
             // 
             this.ribbonPage1.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
@@ -721,6 +749,7 @@
             // ribbonPageGroup3
             // 
             this.ribbonPageGroup3.ItemLinks.Add(this.btnAllOperation);
+            this.ribbonPageGroup3.ItemLinks.Add(this.btnAllProcess);
             this.ribbonPageGroup3.Name = "ribbonPageGroup3";
             // 
             // ribbonPageGroup7
@@ -788,6 +817,7 @@
         private DevExpress.XtraBars.BarButtonItem btnImportImporter;
         private DevExpress.XtraBars.BarButtonItem btnProcess;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup8;
+        private DevExpress.XtraBars.BarButtonItem btnAllProcess;
     }
 }
 

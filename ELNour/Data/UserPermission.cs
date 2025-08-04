@@ -44,7 +44,10 @@ namespace ELNour.Data
         public static bool DeleteMakeReceive { get; set; } = false;
         public static bool ManageRecieve { get; set; } = false;
         public static bool ManageSupply { get; set; } = false;
+        public static bool Process { get; set; } = false;
+        public static bool EditProcess { get; set; } = false;
         public static bool AllOperations { get; set; } = false;
+        public static bool AllProcess { get; set; } = false;
         public static bool TakeBakeUp { get; set; } = false;
         public static bool RestoreBackUp { get; set; } = false;
     }

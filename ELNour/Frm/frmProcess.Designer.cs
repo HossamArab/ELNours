@@ -202,6 +202,7 @@
             this.btnSave.Size = new System.Drawing.Size(53, 50);
             this.btnSave.TabIndex = 17;
             this.btnSave.ToolTip = "حفظ";
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // Column6
             // 

@@ -1,10 +1,15 @@
 ﻿using DataBaseOperations;
 using DevExpress.Charts.Native;
+using DevExpress.Data.Linq.Helpers;
+using DevExpress.DataProcessing.InMemoryDataProcessor;
+using DevExpress.PivotGrid.OLAP.SchemaEntities;
 using DevExpress.Printing.Core.PdfExport.Metafile;
 using DevExpress.XtraEditors;
 using ELNour.Classes;
 using ELNour.Data;
+using ELNour.Services;
 using MessageBoxes;
+using Microsoft.SqlServer.Management.Dmf;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,20 +26,22 @@ namespace ELNour.Frm
     public partial class frmProcess : DevExpress.XtraEditors.XtraForm
     {
         DatabaseConnection con;
+        DatabaseOperation oper;
+        IMaxID max = new MaxID();
         private readonly Fills fills = new Fills();
+        string condition = "";
         public frmProcess()
         {
             InitializeComponent();
             con = new DatabaseConnection(Connections.Constr);
+            oper = new DatabaseOperation(con);
             txtFromDate.Value = DateTime.Today;
             txtToDate.Value = DateTime.Today.AddHours(24);
             InitializeData();
-
-
         }
         private void InitializeData()
         {
-            GetData();
+            
             fills.fillComboBox(cmbProduct, "Product_tbl", "Id", "Name");
             cmbProduct.SelectedIndex = -1;
         }
@@ -42,7 +49,7 @@ namespace ELNour.Frm
         {
             try
             {
-                dgvOperation.SuspendLayout();
+                //dgvOperation.SuspendLayout();
                 dgvOperation.Rows.Clear();
                 if (con.Connection.State == ConnectionState.Closed) { con.OpenConnection(); }
 
@@ -107,7 +114,7 @@ namespace ELNour.Frm
                 dgvOperation.Rows.Clear();
                 return;
             }
-            GetData();
+            GetData(condition);
         }
         private void Column1_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -144,7 +151,7 @@ namespace ELNour.Frm
         {
             if (dgvOperation.CurrentCell.ColumnIndex == 3 || dgvOperation.CurrentCell.ColumnIndex == 4)
             {
-                if (!UserPermission.EditMakeReceive) // allowEdit هي متغير يحدد إذا كان مسموحاً بالتعديل أم لا
+                if (!UserPermission.EditProcess) // allowEdit هي متغير يحدد إذا كان مسموحاً بالتعديل أم لا
                 {
                     e.Cancel = true; // إلغاء عملية التعديل
                     MyBox.Show("غير مسموح بالتعديل حالياً", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -172,15 +179,17 @@ namespace ELNour.Frm
             {
                 if (cmbProduct.SelectedIndex == -1)
                 {
-                    GetData();
+                    condition = "";
+                    GetData(condition);
                     return;
                 }
                 
-                string Condition = $"And Product_tbl.Id = {cmbProduct.SelectedValue}";
-                GetData(Condition);
+                condition = $"And Product_tbl.Id = {cmbProduct.SelectedValue}";
+                GetData(condition);
             }
             catch {
-                GetData();
+                condition = "";
+                GetData(condition);
                 return;
             }
         }
@@ -189,9 +198,104 @@ namespace ELNour.Frm
             if (string.IsNullOrEmpty(cmbProduct.Text))
             {
                 cmbProduct.SelectedIndex = -1;
-                GetData();
+                condition = "";
+                GetData(condition);
                 return;
             }
+        }
+        bool isAllFalse()
+        {
+            bool allFalse = true;
+            foreach (DataGridViewRow row in dgvOperation.Rows)
+            {
+                if (row.IsNewRow) continue;
+
+                if (Convert.ToBoolean(row.Cells[6].Value))
+                {
+                    allFalse = false;
+                    break;
+                }
+            }
+            return allFalse;
+        }
+        private void SaveInDataBase()
+        {
+            if (isAllFalse())
+            {
+                MyBox.Show($"لا يمكن الحفظ ما لم يحدث تغير", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            int processId = (max.MaxIDs("Id", "Process_tbl") + 1);
+            con.OpenConnection();
+            con.BeginTransaction();
+
+            try
+            {
+                Dictionary<string, object> ProcessData = new Dictionary<string, object> // بيانات العملية الأساسية
+                {
+                    {"Id",processId},
+                    {"ProcessDate",DateTime.Now },
+                    {"UserId",User.UserID },
+                };
+                oper.InsertWithTransaction("Process_tbl", ProcessData);
+                foreach (DataGridViewRow row in dgvOperation.Rows)
+                {
+                    if(Convert.ToBoolean(row.Cells[6].Value))
+                    {
+                        Dictionary<string, object> ProcessDetails = new Dictionary<string, object>//تفاصيل  العملية 
+                        {
+                            {"ProcessId",processId },
+                            {"ProductId",Convert.ToInt32(row.Cells[0].Value) },
+                            {"Weight",Convert.ToDecimal(row.Cells[2].Value) },
+                            {"Good",Convert.ToDecimal(row.Cells[3].Value) },
+                            {"Bad",Convert.ToDecimal(row.Cells[4].Value) },
+                            {"WeightDifferent",Convert.ToDecimal(row.Cells[5].Value) },
+                            {"UserId",User.UserID },
+                            {"ProcessDate",DateTime.Now},
+                        };
+                        oper.InsertWithTransaction("ProcessDetails_tbl", ProcessDetails);
+                        Dictionary<string, object> UpdateOperation = new Dictionary<string, object>
+                        {
+                            {"IsProccess",true },
+                        };
+                        int productId = Convert.ToInt32(row.Cells[0].Value);
+                        DateTime fromDate = txtFromDate.Value;
+                        DateTime toDate = txtToDate.Value;
+                        string condition = $"RecieveDetails_tbl.ProductId = {productId}" +
+                                           $"AND RecieveDetails_tbl.RecieveId IN( " +
+                                           $"SELECT r.Id "+
+                                           $"FROM Recieve_tbl r " +
+                                           $"WHERE r.RecieveDate BETWEEN '{fromDate:yyyy-MM-dd HH:mm:ss}' AND '{toDate:yyyy-MM-dd HH:mm:ss}')";
+                        oper.UpdateWithTransaction("RecieveDetails_tbl", UpdateOperation,condition);
+                    }
+                    
+                }
+                con.CommitTransaction();
+                MyBox.Show("تم الحفظ بنجاح", "تم الحفظ", MessageBoxButtons.OK, MessageBoxIcon.None);
+
+            }
+            catch (Exception ex)
+            {
+                con.RollbackTransaction();
+                MyBox.Show($"خطأ غير متوقع : {Environment.NewLine} {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            finally
+            {
+                con.CloseConnection();
+            }
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            if (dgvOperation.Rows.Count <= 0)
+            {
+                MyBox.Show($"لا يمكن الحفظ و الجدول فارغ", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            
+            SaveInDataBase();
+            GetData(condition);
         }
     }
 }
