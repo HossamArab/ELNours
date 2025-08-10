@@ -168,7 +168,7 @@
             this.txtBoxWeight.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtBoxWeight.Location = new System.Drawing.Point(10, 57);
             this.txtBoxWeight.Name = "txtBoxWeight";
-            this.txtBoxWeight.Size = new System.Drawing.Size(232, 26);
+            this.txtBoxWeight.Size = new System.Drawing.Size(258, 26);
             this.txtBoxWeight.TabIndex = 25;
             this.txtBoxWeight.TextChanged += new System.EventHandler(this.WeightChanged);
             this.txtBoxWeight.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtpress);
@@ -178,7 +178,7 @@
             this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(270, 60);
+            this.label13.Location = new System.Drawing.Point(274, 60);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(101, 18);
             this.label13.TabIndex = 24;
@@ -191,7 +191,7 @@
             this.txtUser.Location = new System.Drawing.Point(10, 89);
             this.txtUser.Name = "txtUser";
             this.txtUser.ReadOnly = true;
-            this.txtUser.Size = new System.Drawing.Size(232, 26);
+            this.txtUser.Size = new System.Drawing.Size(258, 26);
             this.txtUser.TabIndex = 23;
             this.txtUser.Text = "Admin";
             // 
@@ -200,7 +200,7 @@
             this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(291, 92);
+            this.label8.Location = new System.Drawing.Point(295, 92);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(80, 18);
             this.label8.TabIndex = 22;
@@ -252,7 +252,7 @@
             this.txtCountBoxes.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtCountBoxes.Location = new System.Drawing.Point(398, 57);
             this.txtCountBoxes.Name = "txtCountBoxes";
-            this.txtCountBoxes.Size = new System.Drawing.Size(216, 26);
+            this.txtCountBoxes.Size = new System.Drawing.Size(238, 26);
             this.txtCountBoxes.TabIndex = 13;
             this.txtCountBoxes.TextChanged += new System.EventHandler(this.WeightChanged);
             this.txtCountBoxes.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtpress);
@@ -285,7 +285,7 @@
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(317, 28);
+            this.label5.Location = new System.Drawing.Point(321, 28);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(54, 18);
             this.label5.TabIndex = 10;
@@ -497,6 +497,7 @@
             this.txtWeight.Size = new System.Drawing.Size(137, 30);
             this.txtWeight.TabIndex = 12;
             this.txtWeight.Text = "0.00";
+            this.txtWeight.TextChanged += new System.EventHandler(this.WeightChanged);
             // 
             // panelControl4
             // 

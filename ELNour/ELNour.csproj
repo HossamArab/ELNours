@@ -253,6 +253,7 @@
       <DependentUpon>dsRecieve.xsd</DependentUpon>
     </Compile>
     <Compile Include="Data\Activation.cs" />
+    <Compile Include="Data\InProcess.cs" />
     <Compile Include="Data\Server.cs" />
     <Compile Include="Data\User.cs" />
     <Compile Include="Data\UserPermission.cs" />
@@ -279,6 +280,12 @@
     </Compile>
     <Compile Include="Frm\frmMainData.Designer.cs">
       <DependentUpon>frmMainData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frm\frmMakeProcess.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frm\frmMakeProcess.Designer.cs">
+      <DependentUpon>frmMakeProcess.cs</DependentUpon>
     </Compile>
     <Compile Include="Frm\frmManageRecieve.cs">
       <SubType>Form</SubType>
@@ -388,6 +395,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Frm\frmMainData.resx">
       <DependentUpon>frmMainData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frm\frmMakeProcess.resx">
+      <DependentUpon>frmMakeProcess.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Frm\frmManageRecieve.resx">
       <DependentUpon>frmManageRecieve.cs</DependentUpon>

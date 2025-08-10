@@ -41,9 +41,36 @@ namespace ELNour.Frm
         }
         private void InitializeData()
         {
-            
+            fills.fillComboBox(cmbVendor, "Vendor_tbl", "Id", "Name");
+            cmbVendor.SelectedIndex = -1;
             fills.fillComboBox(cmbProduct, "Product_tbl", "Id", "Name");
             cmbProduct.SelectedIndex = -1;
+        }
+        private decimal GoodWeight(int RecieveId ,int ProductId)
+        {
+            decimal total = 0;
+            try
+            {
+                if (con.Connection.State == ConnectionState.Open)
+                    con.CloseConnection();
+                SqlCommand Cmd = new SqlCommand();
+                Cmd.Connection = con.Connection;
+                Cmd.CommandType = CommandType.Text;
+                Cmd.CommandText = ("Select NetWeight From InProcess_tbl Where ReciveId =@RecieveId and ProductId=@ProductId");
+                Cmd.Parameters.Clear();
+                Cmd.Parameters.Add("@RecieveId", SqlDbType.Int).Value = RecieveId;
+                Cmd.Parameters.Add("@ProductId", SqlDbType.Int).Value = ProductId;
+                con.OpenConnection();
+                total = Convert.ToDecimal(Cmd.ExecuteScalar());
+                return total;
+
+            }
+            catch
+            {
+                total = 0;
+                con.CloseConnection();
+                return total;
+            }
         }
         private void GetData(string Condition = "")
         {
@@ -52,27 +79,41 @@ namespace ELNour.Frm
                 //dgvOperation.SuspendLayout();
                 dgvOperation.Rows.Clear();
                 if (con.Connection.State == ConnectionState.Closed) { con.OpenConnection(); }
-
                 string query = $@"
-                                SELECT 
-                                Product_tbl.Id AS ProductID,
-                                Product_tbl.Name AS ProductName,
-                                ISNULL(SUM(RecieveDetails_tbl.NetWeight), 0) AS NetWeight
-                            FROM 
-                                Product_tbl
-                            INNER JOIN 
-                                (RecieveDetails_tbl 
-                                 INNER JOIN Recieve_tbl 
-                                     ON RecieveDetails_tbl.RecieveId = Recieve_tbl.Id 
-                                     AND Recieve_tbl.Type = 0 
-                                     AND Recieve_tbl.RecieveDate BETWEEN @date1 AND @date2)
-                                ON Product_tbl.Id = RecieveDetails_tbl.ProductId
-                                AND RecieveDetails_tbl.IsProccess = 0
-                                {Condition}
-                            GROUP BY
-                                Product_tbl.Id, Product_tbl.Name
-                            ORDER BY 
-                                Product_tbl.Id";
+                                SELECT
+                                    Recieve_tbl.Id AS RecieveId,
+                                    Recieve_tbl.VendorId,
+                                    Recieve_tbl.RecieveDate,
+                                    Recieve_tbl.BoxesCount,
+                                    Recieve_tbl.TotalWeight,
+                                    Recieve_tbl.TotalDiscount,
+                                    Recieve_tbl.TotalNetWeight,
+                                    Product_tbl.Id AS ProductID,
+                                    Product_tbl.Name AS ProductName,
+                                    Vendor_tbl.Name AS VendorName
+                                FROM
+                                    Recieve_tbl
+                                INNER JOIN (
+                                    SELECT 
+                                        RecieveId,
+                                        ProductId,
+                                        IsProccess,
+                                        ROW_NUMBER() OVER (
+                                            PARTITION BY RecieveId, ProductId 
+                                            ORDER BY Id ASC 
+                                        ) AS rn
+                                    FROM RecieveDetails_tbl
+                                ) AS RecieveDetails_filtered ON RecieveDetails_filtered.RecieveId = Recieve_tbl.Id
+                                                           AND RecieveDetails_filtered.rn = 1 
+                                INNER JOIN Product_tbl ON RecieveDetails_filtered.ProductId = Product_tbl.Id
+                                INNER JOIN Vendor_tbl ON Vendor_tbl.Id = Recieve_tbl.VendorId
+                                WHERE 
+                                    Recieve_tbl.Type = 0 
+                                    AND Recieve_tbl.RecieveDate BETWEEN @date1 AND @date2
+                                    AND RecieveDetails_filtered.IsProccess = 0
+                                    {Condition}
+                                ORDER BY 
+                                    Recieve_tbl.Id";
 
                 using (SqlDataAdapter da = new SqlDataAdapter(query, con.Connection))
                 {
@@ -88,9 +129,9 @@ namespace ELNour.Frm
 
                 dgvOperation.ResumeLayout();
             }
-            catch
+            catch (Exception ex) 
             {
-                //MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message);
             }
             finally
             {
@@ -100,11 +141,59 @@ namespace ELNour.Frm
         private void AddRowToDataGridView(DataRow row)
         {
             int rowIndex = dgvOperation.Rows.Add();
+            int state = 0;
             DataGridViewRow currentRow = dgvOperation.Rows[rowIndex];
+            currentRow.Cells[0].Value = row["RecieveId"];
+            currentRow.Cells[1].Value = Convert.ToDateTime(row["RecieveDate"]).ToShortDateString();
+            currentRow.Cells[2].Value = Convert.ToDateTime(row["RecieveDate"]).ToShortTimeString();
+            currentRow.Cells[3].Value = row["VendorId"];
+            currentRow.Cells[4].Value = row["VendorName"];
+            currentRow.Cells[5].Value = row["ProductId"];
+            currentRow.Cells[6].Value = row["ProductName"];
+            currentRow.Cells[7].Value = row["TotalNetWeight"];
+            currentRow.Cells[8].Value = GoodWeight(Convert.ToInt32(currentRow.Cells[0].Value), Convert.ToInt32(currentRow.Cells[5].Value));
+            if(Convert.ToDecimal(currentRow.Cells[8].Value)  > 0)
+            {
+                state = 1;
+            }
+            switch(state)
+            {
+                case 0:
+                    currentRow.Cells[11].Value = "لم يتم الانتاج ...";
+                    currentRow.Cells[11].Style.BackColor = Color.Maroon;
+                    currentRow.Cells[11].Style.ForeColor = Color.White;
+                    currentRow.Cells[12].Value = state;
+                    break;
+                case 1:
+                    currentRow.Cells[11].Value = "تحت الانتاج ...";
+                    currentRow.Cells[11].Style.BackColor = Color.Gold;
+                    currentRow.Cells[11].Style.ForeColor = Color.Black;
+                    currentRow.Cells[12].Value = state;
+                    break;
+                default:
+                    break;
+            }
+            
+        }
+        public void Search()
+        {
+            condition = "AND ";
+            if (cmbVendor.SelectedIndex != -1 && Convert.ToInt32(cmbVendor.SelectedValue) != 0)
+            {
+                condition += "Vendor_tbl.Id = " + Convert.ToInt32(cmbVendor.SelectedValue) + " AND ";
+            }
 
-            currentRow.Cells[0].Value = row["ProductId"];
-            currentRow.Cells[1].Value = row["ProductName"];
-            currentRow.Cells[2].Value = row["NetWeight"];
+            if (cmbProduct.SelectedIndex != -1 && Convert.ToInt32(cmbProduct.SelectedValue) != 0)
+            {
+                condition += "Product_tbl.Id = " + Convert.ToInt32(cmbProduct.SelectedValue) + " AND ";
+            }
+            // إزالة الكلمة الأخيرة "AND"
+            if (!string.IsNullOrEmpty(condition))
+            {
+                condition = condition.TrimEnd(" AND".ToCharArray());
+            }
+
+            GetData(condition);
         }
         private void txtFromDate_ValueChanged(object sender, EventArgs e)
         {
@@ -163,45 +252,35 @@ namespace ELNour.Frm
         private void dgvOperation_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             var currentRow = dgvOperation.CurrentRow;
-            if (dgvOperation.CurrentCell.ColumnIndex == 3 || dgvOperation.CurrentCell.ColumnIndex == 4)
+            if (dgvOperation.CurrentCell.ColumnIndex == 8 || dgvOperation.CurrentCell.ColumnIndex == 9)
             {
                 if(Convert.ToDecimal(currentRow.Cells[2].Value) != 0 && Convert.ToDecimal(currentRow.Cells[3].Value) != 0)
                 {
                     currentRow.Cells[5].Value = ((Convert.ToDecimal(currentRow.Cells[3].Value) + Convert.ToDecimal(currentRow.Cells[4].Value)) - Convert.ToDecimal(currentRow.Cells[2].Value));
-                    currentRow.Cells[6].Value = 1;
+                    currentRow.Cells[12].Value = 1;
                 }
                 
             }
         }
-        private void cmbProduct_SelectedIndexChanged(object sender, EventArgs e)
+        private void ChangeValue(object sender, EventArgs e)
         {
             try
             {
-                if (cmbProduct.SelectedIndex == -1)
+                if (cmbVendor.Text == "" || cmbVendor.Text == string.Empty)
                 {
-                    condition = "";
-                    GetData(condition);
+                    cmbVendor.SelectedIndex = -1;
+                    Search();
                     return;
                 }
-                
-                condition = $"And Product_tbl.Id = {cmbProduct.SelectedValue}";
-                GetData(condition);
+                if (cmbProduct.Text == "" || cmbProduct.Text == string.Empty)
+                {
+                    cmbProduct.SelectedIndex = -1;
+                    Search();
+                    return;
+                }
+                Search();
             }
-            catch {
-                condition = "";
-                GetData(condition);
-                return;
-            }
-        }
-        private void cmbProduct_TextChanged(object sender, EventArgs e)
-        {
-            if (string.IsNullOrEmpty(cmbProduct.Text))
-            {
-                cmbProduct.SelectedIndex = -1;
-                condition = "";
-                GetData(condition);
-                return;
-            }
+            catch { return; }
         }
         bool isAllFalse()
         {
@@ -210,7 +289,7 @@ namespace ELNour.Frm
             {
                 if (row.IsNewRow) continue;
 
-                if (Convert.ToBoolean(row.Cells[6].Value))
+                if (Convert.ToBoolean(row.Cells[12].Value))
                 {
                     allFalse = false;
                     break;
@@ -267,6 +346,7 @@ namespace ELNour.Frm
                                            $"FROM Recieve_tbl r " +
                                            $"WHERE r.RecieveDate BETWEEN '{fromDate:yyyy-MM-dd HH:mm:ss}' AND '{toDate:yyyy-MM-dd HH:mm:ss}')";
                         oper.UpdateWithTransaction("RecieveDetails_tbl", UpdateOperation,condition);
+                        oper.Delete("InProcess", "");
                     }
                     
                 }
@@ -285,7 +365,6 @@ namespace ELNour.Frm
                 con.CloseConnection();
             }
         }
-
         private void btnSave_Click(object sender, EventArgs e)
         {
             if (dgvOperation.Rows.Count <= 0)
@@ -296,6 +375,40 @@ namespace ELNour.Frm
             
             SaveInDataBase();
             GetData(condition);
+        }
+        private void SendDataToUpgrade()
+        {
+            bool isSameFormOpen = Application.OpenForms.OfType<frmMakeProcess>().Any();
+            bool isWeightFormOpen = Application.OpenForms.OfType<frmOperation>().Any();
+            if(isSameFormOpen)
+            {
+                MyBox.Show("هذه الصفحة مفتوحة بالفعل يرجي التأكد منها لعدم حدوث خلل خاص بالميزان","تنبيه",MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (isWeightFormOpen)
+            {
+                MyBox.Show("هناك صفحة وزن مفتوحة بالفعل يرجي التأكد منها لعدم حدوث خلل خاص بالميزان", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            frmMakeProcess frm = new frmMakeProcess();
+            fills.fillComboBox(frm.cmbVendor, "Vendor_tbl", "Id", "Name");
+            frm.cmbVendor.SelectedIndex = -1;
+            fills.fillComboBox(frm.cmbItems, "Product_tbl", "Id", "Name");
+            frm.cmbItems.SelectedIndex = -1;
+            DataGridViewRow row = dgvOperation.CurrentRow;
+            frm.txtRecieveId.Text = row.Cells[0].Value.ToString();
+            frm.cmbVendor.SelectedValue = Convert.ToInt32(row.Cells[3].Value);
+            frm.cmbItems.SelectedValue = Convert.ToInt32(row.Cells[5].Value);
+            frm.txtUser.Text = User.FullName;
+            frm.Show();
+        }
+
+        private void dgvOperation_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if(e.ColumnIndex == 13)
+            {
+                SendDataToUpgrade();
+            }
         }
     }
 }
