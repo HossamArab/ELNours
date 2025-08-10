@@ -34,10 +34,10 @@ namespace ELNour.Data
             try
             {
                 if (con.Connection.State == ConnectionState.Closed) { con.OpenConnection(); }
-                string query = $@"Select * From InProcess_tbl Where ReciveId =@RecieveId and ProductId=@ProductId";
+                string query = $@"Select * From InProcess_tbl Where RecieveId =@RecieveId and ProductId=@ProductId";
                 using (SqlDataAdapter da = new SqlDataAdapter(query, con.Connection))
                 {
-                    da.SelectCommand.Parameters.Add("@ReciveId", SqlDbType.Int).Value = recieveId;
+                    da.SelectCommand.Parameters.Add("@RecieveId", SqlDbType.Int).Value = recieveId;
                     da.SelectCommand.Parameters.Add("@ProductId", SqlDbType.Int).Value = productId;
                     DataTable dt = new DataTable();
                     da.Fill(dt);

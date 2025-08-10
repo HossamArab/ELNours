@@ -56,7 +56,7 @@ namespace ELNour.Frm
                 SqlCommand Cmd = new SqlCommand();
                 Cmd.Connection = con.Connection;
                 Cmd.CommandType = CommandType.Text;
-                Cmd.CommandText = ("Select NetWeight From InProcess_tbl Where ReciveId =@RecieveId and ProductId=@ProductId");
+                Cmd.CommandText = ("Select NetWeight From InProcess_tbl Where RecieveId =@RecieveId and ProductId=@ProductId");
                 Cmd.Parameters.Clear();
                 Cmd.Parameters.Add("@RecieveId", SqlDbType.Int).Value = RecieveId;
                 Cmd.Parameters.Add("@ProductId", SqlDbType.Int).Value = ProductId;
@@ -152,6 +152,7 @@ namespace ELNour.Frm
             currentRow.Cells[6].Value = row["ProductName"];
             currentRow.Cells[7].Value = row["TotalNetWeight"];
             currentRow.Cells[8].Value = GoodWeight(Convert.ToInt32(currentRow.Cells[0].Value), Convert.ToInt32(currentRow.Cells[5].Value));
+            currentRow.Cells[10].Value = ((Convert.ToDecimal(currentRow.Cells[8].Value) + Convert.ToDecimal(currentRow.Cells[9].Value)) - Convert.ToDecimal(currentRow.Cells[7].Value));
             if(Convert.ToDecimal(currentRow.Cells[8].Value)  > 0)
             {
                 state = 1;
@@ -254,9 +255,9 @@ namespace ELNour.Frm
             var currentRow = dgvOperation.CurrentRow;
             if (dgvOperation.CurrentCell.ColumnIndex == 8 || dgvOperation.CurrentCell.ColumnIndex == 9)
             {
-                if(Convert.ToDecimal(currentRow.Cells[2].Value) != 0 && Convert.ToDecimal(currentRow.Cells[3].Value) != 0)
+                if(Convert.ToDecimal(currentRow.Cells[8].Value) != 0 && Convert.ToDecimal(currentRow.Cells[7].Value) != 0)
                 {
-                    currentRow.Cells[5].Value = ((Convert.ToDecimal(currentRow.Cells[3].Value) + Convert.ToDecimal(currentRow.Cells[4].Value)) - Convert.ToDecimal(currentRow.Cells[2].Value));
+                    currentRow.Cells[10].Value = ((Convert.ToDecimal(currentRow.Cells[8].Value) + Convert.ToDecimal(currentRow.Cells[9].Value)) - Convert.ToDecimal(currentRow.Cells[7].Value));
                     currentRow.Cells[12].Value = 1;
                 }
                 
@@ -390,7 +391,7 @@ namespace ELNour.Frm
                 MyBox.Show("هناك صفحة وزن مفتوحة بالفعل يرجي التأكد منها لعدم حدوث خلل خاص بالميزان", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            frmMakeProcess frm = new frmMakeProcess();
+            frmMakeProcess frm = new frmMakeProcess(this);
             fills.fillComboBox(frm.cmbVendor, "Vendor_tbl", "Id", "Name");
             frm.cmbVendor.SelectedIndex = -1;
             fills.fillComboBox(frm.cmbItems, "Product_tbl", "Id", "Name");
@@ -402,7 +403,6 @@ namespace ELNour.Frm
             frm.txtUser.Text = User.FullName;
             frm.Show();
         }
-
         private void dgvOperation_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if(e.ColumnIndex == 13)

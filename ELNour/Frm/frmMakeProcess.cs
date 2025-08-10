@@ -27,9 +27,10 @@ namespace ELNour.Frm
         DatabaseOperation oper;
         IMaxID max = new MaxID();
         frmProcess frmProcess;
-        public frmMakeProcess()
+        public frmMakeProcess(frmProcess _frmProcess)
         {
             InitializeComponent();
+            frmProcess = _frmProcess;
             con = new DatabaseConnection(Connections.Constr);
             oper = new DatabaseOperation(con);
             LoadScaleData();
@@ -207,6 +208,11 @@ namespace ELNour.Frm
         private void frmMakeProcess_FormClosing(object sender, FormClosingEventArgs e)
         {
             ISColsing = true ;
+            if(port != null)
+            {
+                port.DataReceived -= Port_DataReceived;
+                port.Dispose();
+            }
         }
         private void InsertNewWeight()
         {
@@ -275,8 +281,7 @@ namespace ELNour.Frm
             }
             try
             {
-                con.OpenConnection();
-                con.BeginTransaction();
+                
                 InProcess inProcess = new InProcess(Convert.ToInt32(txtRecieveId.Text), Convert.ToInt32(cmbItems.SelectedValue));
                 inProcess.BoxesCount += (int)GetDecimalValue(txtCountBoxes.Text); 
                 inProcess.PalleteWeight += GetDecimalValue(txtPlateWeight.Text);
@@ -286,6 +291,8 @@ namespace ELNour.Frm
                 inProcess.DiscountWeight += GetDecimalValue(txtDiscountWeight.Text);
                 inProcess.TotalDiscount += GetDecimalValue(txtTotalDiscount.Text);
                 inProcess.NetWeight += GetDecimalValue(lblNetWeight.Text);
+                if (con.Connection.State == ConnectionState.Closed) { con.OpenConnection(); }
+                con.BeginTransaction();
                 Dictionary<string, object> InProcessDaata = new Dictionary<string, object>()
                 {
                     {"BoxesCount" ,inProcess.BoxesCount},
@@ -297,7 +304,7 @@ namespace ELNour.Frm
                     {"TotalDiscount" ,inProcess.TotalDiscount},
                     {"NetWeight" ,inProcess.NetWeight}
                 };
-                oper.UpdateWithTransaction("InProcess_tbl", InProcessDaata, $"ReciveId ={txtRecieveId.Text} and ProductId={cmbItems.SelectedValue}");
+                oper.UpdateWithTransaction("InProcess_tbl", InProcessDaata, $"RecieveId ={txtRecieveId.Text} and ProductId={cmbItems.SelectedValue}");
                 con.CommitTransaction();
                 MyBox.Show("تم الحفظ بنجاح", "تم الحفظ", MessageBoxButtons.OK, MessageBoxIcon.None);
 
@@ -316,10 +323,10 @@ namespace ELNour.Frm
         bool chkData(int recieveId, int productId)
         {
             if (con.Connection.State == ConnectionState.Closed) { con.OpenConnection(); }
-            string query = $@"Select * From InProcess_tbl Where ReciveId =@RecieveId and ProductId=@ProductId";
+            string query = $@"Select * From InProcess_tbl Where RecieveId =@RecieveId and ProductId=@ProductId";
             using (SqlDataAdapter da = new SqlDataAdapter(query, con.Connection))
             {
-                da.SelectCommand.Parameters.Add("@ReciveId", SqlDbType.Int).Value = recieveId;
+                da.SelectCommand.Parameters.Add("@RecieveId", SqlDbType.Int).Value = recieveId;
                 da.SelectCommand.Parameters.Add("@ProductId", SqlDbType.Int).Value = productId;
                 DataTable dt = new DataTable();
                 da.Fill(dt);
@@ -334,13 +341,11 @@ namespace ELNour.Frm
             if(chkData(Convert.ToInt32(txtRecieveId.Text),Convert.ToInt32(cmbItems.SelectedValue)))
             {
                 UpdateWeight();
-                frmProcess = new frmProcess();
                 frmProcess.Search();
             }
             else
             {
                 InsertNewWeight();
-                frmProcess = new frmProcess();
                 frmProcess.Search();
             }
         }

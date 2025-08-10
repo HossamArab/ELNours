@@ -189,7 +189,6 @@ namespace ELNour.Frm
             
             SumInPanel1();
         }
-
         private void tsPlatteWeight_Toggled(object sender, EventArgs e)
         {
             if (tsPlatteWeight.IsOn)
@@ -262,15 +261,18 @@ namespace ELNour.Frm
         {
             Save();
         }
-
         private void frmOperation_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.F3) { btnSave_Click(null, null); }
         }
-
         private void frmOperation_FormClosing(object sender, FormClosingEventArgs e)
         {
             ISColsing = true;
+            if (port != null)
+            {
+                port.DataReceived -= Port_DataReceived;
+                port.Dispose();
+            }
         }
     }
 }
