@@ -1,24 +1,14 @@
 ﻿using DataBaseOperations;
-using DevExpress.Charts.Native;
-using DevExpress.Data.Linq.Helpers;
-using DevExpress.DataProcessing.InMemoryDataProcessor;
-using DevExpress.PivotGrid.OLAP.SchemaEntities;
-using DevExpress.Printing.Core.PdfExport.Metafile;
-using DevExpress.XtraEditors;
 using ELNour.Classes;
 using ELNour.Data;
 using ELNour.Services;
 using MessageBoxes;
-using Microsoft.SqlServer.Management.Dmf;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ELNour.Frm
@@ -46,7 +36,7 @@ namespace ELNour.Frm
             fills.fillComboBox(cmbProduct, "Product_tbl", "Id", "Name");
             cmbProduct.SelectedIndex = -1;
         }
-        private decimal GoodWeight(int RecieveId ,int ProductId)
+        private decimal GoodWeight(int RecieveId, int ProductId)
         {
             decimal total = 0;
             try
@@ -129,7 +119,7 @@ namespace ELNour.Frm
 
                 dgvOperation.ResumeLayout();
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -153,11 +143,11 @@ namespace ELNour.Frm
             currentRow.Cells[7].Value = row["TotalNetWeight"];
             currentRow.Cells[8].Value = GoodWeight(Convert.ToInt32(currentRow.Cells[0].Value), Convert.ToInt32(currentRow.Cells[5].Value));
             currentRow.Cells[10].Value = ((Convert.ToDecimal(currentRow.Cells[8].Value) + Convert.ToDecimal(currentRow.Cells[9].Value)) - Convert.ToDecimal(currentRow.Cells[7].Value));
-            if(Convert.ToDecimal(currentRow.Cells[8].Value)  > 0)
+            if (Convert.ToDecimal(currentRow.Cells[8].Value) > 0)
             {
                 state = 1;
             }
-            switch(state)
+            switch (state)
             {
                 case 0:
                     currentRow.Cells[11].Value = "لم يتم الانتاج ...";
@@ -174,7 +164,7 @@ namespace ELNour.Frm
                 default:
                     break;
             }
-            
+
         }
         public void Search()
         {
@@ -198,9 +188,9 @@ namespace ELNour.Frm
         }
         private void txtFromDate_ValueChanged(object sender, EventArgs e)
         {
-            if(txtFromDate.Value > txtToDate.Value)
+            if (txtFromDate.Value > txtToDate.Value)
             {
-               MyBox.Show("تاريخ البداية يجب أن يكون أقل من تاريخ النهاية","تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MyBox.Show("تاريخ البداية يجب أن يكون أقل من تاريخ النهاية", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 dgvOperation.Rows.Clear();
                 return;
             }
@@ -248,19 +238,19 @@ namespace ELNour.Frm
                     return;
                 }
             }
-            
+
         }
         private void dgvOperation_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             var currentRow = dgvOperation.CurrentRow;
             if (dgvOperation.CurrentCell.ColumnIndex == 8 || dgvOperation.CurrentCell.ColumnIndex == 9)
             {
-                if(Convert.ToDecimal(currentRow.Cells[8].Value) != 0 && Convert.ToDecimal(currentRow.Cells[7].Value) != 0)
+                if (Convert.ToDecimal(currentRow.Cells[8].Value) != 0 && Convert.ToDecimal(currentRow.Cells[7].Value) != 0)
                 {
                     currentRow.Cells[10].Value = ((Convert.ToDecimal(currentRow.Cells[8].Value) + Convert.ToDecimal(currentRow.Cells[9].Value)) - Convert.ToDecimal(currentRow.Cells[7].Value));
                     currentRow.Cells[12].Value = 1;
                 }
-                
+
             }
         }
         private void ChangeValue(object sender, EventArgs e)
@@ -320,16 +310,18 @@ namespace ELNour.Frm
                 oper.InsertWithTransaction("Process_tbl", ProcessData);
                 foreach (DataGridViewRow row in dgvOperation.Rows)
                 {
-                    if(Convert.ToBoolean(row.Cells[6].Value))
+                    if (Convert.ToBoolean(row.Cells[12].Value))
                     {
                         Dictionary<string, object> ProcessDetails = new Dictionary<string, object>//تفاصيل  العملية 
                         {
                             {"ProcessId",processId },
-                            {"ProductId",Convert.ToInt32(row.Cells[0].Value) },
-                            {"Weight",Convert.ToDecimal(row.Cells[2].Value) },
-                            {"Good",Convert.ToDecimal(row.Cells[3].Value) },
-                            {"Bad",Convert.ToDecimal(row.Cells[4].Value) },
-                            {"WeightDifferent",Convert.ToDecimal(row.Cells[5].Value) },
+                            {"RecieveId",Convert.ToInt32(row.Cells[0].Value) },
+                            {"VendorId",Convert.ToInt32(row.Cells[3].Value) },
+                            {"ProductId",Convert.ToInt32(row.Cells[5].Value) },
+                            {"Weight",Convert.ToDecimal(row.Cells[7].Value) },
+                            {"Good",Convert.ToDecimal(row.Cells[8].Value) },
+                            {"Bad",Convert.ToDecimal(row.Cells[9].Value) },
+                            {"WeightDifferent",Convert.ToDecimal(row.Cells[10].Value) },
                             {"UserId",User.UserID },
                             {"ProcessDate",DateTime.Now},
                         };
@@ -338,18 +330,11 @@ namespace ELNour.Frm
                         {
                             {"IsProccess",true },
                         };
-                        int productId = Convert.ToInt32(row.Cells[0].Value);
-                        DateTime fromDate = txtFromDate.Value;
-                        DateTime toDate = txtToDate.Value;
-                        string condition = $"RecieveDetails_tbl.ProductId = {productId}" +
-                                           $"AND RecieveDetails_tbl.RecieveId IN( " +
-                                           $"SELECT r.Id "+
-                                           $"FROM Recieve_tbl r " +
-                                           $"WHERE r.RecieveDate BETWEEN '{fromDate:yyyy-MM-dd HH:mm:ss}' AND '{toDate:yyyy-MM-dd HH:mm:ss}')";
-                        oper.UpdateWithTransaction("RecieveDetails_tbl", UpdateOperation,condition);
-                        oper.Delete("InProcess", "");
+                        string condition = $"RecieveId = {Convert.ToInt32(row.Cells[0].Value)} AND ProductId = {Convert.ToInt32(row.Cells[5].Value)}";
+                        oper.UpdateWithTransaction("RecieveDetails_tbl", UpdateOperation, condition);
+                        oper.DeleteWithTransaction("InProcess_tbl", $"RecieveId = {Convert.ToInt32(row.Cells[0].Value)} AND ProductId = {Convert.ToInt32(row.Cells[5].Value)} ");
                     }
-                    
+
                 }
                 con.CommitTransaction();
                 MyBox.Show("تم الحفظ بنجاح", "تم الحفظ", MessageBoxButtons.OK, MessageBoxIcon.None);
@@ -373,7 +358,7 @@ namespace ELNour.Frm
                 MyBox.Show($"لا يمكن الحفظ و الجدول فارغ", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            
+
             SaveInDataBase();
             GetData(condition);
         }
@@ -381,9 +366,9 @@ namespace ELNour.Frm
         {
             bool isSameFormOpen = Application.OpenForms.OfType<frmMakeProcess>().Any();
             bool isWeightFormOpen = Application.OpenForms.OfType<frmOperation>().Any();
-            if(isSameFormOpen)
+            if (isSameFormOpen)
             {
-                MyBox.Show("هذه الصفحة مفتوحة بالفعل يرجي التأكد منها لعدم حدوث خلل خاص بالميزان","تنبيه",MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MyBox.Show("هذه الصفحة مفتوحة بالفعل يرجي التأكد منها لعدم حدوث خلل خاص بالميزان", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             if (isWeightFormOpen)
@@ -405,7 +390,7 @@ namespace ELNour.Frm
         }
         private void dgvOperation_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if(e.ColumnIndex == 13)
+            if (e.ColumnIndex == 13)
             {
                 SendDataToUpgrade();
             }

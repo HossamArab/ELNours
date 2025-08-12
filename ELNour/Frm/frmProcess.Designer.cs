@@ -239,7 +239,6 @@
             this.dgvOperation.EnableHeadersVisualStyles = false;
             this.dgvOperation.Location = new System.Drawing.Point(2, 2);
             this.dgvOperation.Name = "dgvOperation";
-            this.dgvOperation.ReadOnly = true;
             this.dgvOperation.RowHeadersVisible = false;
             this.dgvOperation.RowTemplate.Height = 30;
             this.dgvOperation.Size = new System.Drawing.Size(1194, 525);
@@ -345,7 +344,6 @@
             this.Column4.DefaultCellStyle = dataGridViewCellStyle3;
             this.Column4.HeaderText = "الفرزة";
             this.Column4.Name = "Column4";
-            this.Column4.ReadOnly = true;
             this.Column4.Width = 180;
             // 
             // Column5
@@ -377,7 +375,6 @@
             // 
             this.Column14.HeaderText = "الوزن";
             this.Column14.Name = "Column14";
-            this.Column14.ReadOnly = true;
             this.Column14.Text = "الوزن";
             this.Column14.ToolTipText = "الوزن";
             this.Column14.UseColumnTextForButtonValue = true;

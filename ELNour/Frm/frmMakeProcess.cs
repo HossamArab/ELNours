@@ -1,19 +1,14 @@
 ﻿using DataBaseOperations;
-using DevExpress.XtraEditors;
 using ELNour.Classes;
 using ELNour.Data;
 using ELNour.Services;
 using MessageBoxes;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
 using System.IO.Ports;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ELNour.Frm
@@ -81,7 +76,7 @@ namespace ELNour.Frm
             catch
             {
 
-                port.Close() ;
+                port.Close();
             }
         }
         private void LoadScaleData()
@@ -147,9 +142,9 @@ namespace ELNour.Frm
             {
                 DiscountWeight = decimal.Parse(txtDiscountWeight.Text);
             }
-            if (tsCount.IsOn) 
+            if (tsCount.IsOn)
             {
-                
+
                 txtWeight.Text = lblMainWeight.Text;
             }
             if (txtWeight.Text != "")
@@ -195,7 +190,7 @@ namespace ELNour.Frm
                     port.Open();
                 }
             }
-            
+
         }
         decimal GetDecimalValue(object value)
         {
@@ -207,8 +202,8 @@ namespace ELNour.Frm
         }
         private void frmMakeProcess_FormClosing(object sender, FormClosingEventArgs e)
         {
-            ISColsing = true ;
-            if(port != null)
+            ISColsing = true;
+            if (port != null)
             {
                 port.DataReceived -= Port_DataReceived;
                 port.Dispose();
@@ -281,9 +276,9 @@ namespace ELNour.Frm
             }
             try
             {
-                
+
                 InProcess inProcess = new InProcess(Convert.ToInt32(txtRecieveId.Text), Convert.ToInt32(cmbItems.SelectedValue));
-                inProcess.BoxesCount += (int)GetDecimalValue(txtCountBoxes.Text); 
+                inProcess.BoxesCount += (int)GetDecimalValue(txtCountBoxes.Text);
                 inProcess.PalleteWeight += GetDecimalValue(txtPlateWeight.Text);
                 inProcess.BoxesWeight += GetDecimalValue(txtBoxesWeight.Text);
                 inProcess.BoxWeight += GetDecimalValue(txtBoxWeight.Text);
@@ -338,7 +333,7 @@ namespace ELNour.Frm
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if(chkData(Convert.ToInt32(txtRecieveId.Text),Convert.ToInt32(cmbItems.SelectedValue)))
+            if (chkData(Convert.ToInt32(txtRecieveId.Text), Convert.ToInt32(cmbItems.SelectedValue)))
             {
                 UpdateWeight();
                 frmProcess.Search();

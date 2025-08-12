@@ -32,13 +32,19 @@ namespace ELNour.Frm
             Search();
             fills.fillComboBox(cmbProduct, "Product_tbl", "Id", "Name");
             cmbProduct.SelectedIndex = -1;
+            fills.fillComboBox(cmbVendor, "Vendor_tbl", "Id", "Name");
+            cmbVendor.SelectedIndex = -1;
         }
         private void Search()
         {
-            string condition = "(ProcessDetails_tbl.ProcessDate >= @date1 AND ProcessDetails_tbl.ProcessDate <= @date2) AND ";
+            string condition = "AND ";
             if (cmbProduct.SelectedIndex != -1 && Convert.ToInt32(cmbProduct.SelectedValue) != 0)
             {
                 condition += "ProcessDetails_tbl.ProductId = " + Convert.ToInt32(cmbProduct.SelectedValue) + " AND ";
+            }
+            if (cmbVendor.SelectedIndex != -1 && Convert.ToInt32(cmbVendor.SelectedValue) != 0)
+            {
+                condition += "ProcessDetails_tbl.VendorId = " + Convert.ToInt32(cmbVendor.SelectedValue) + " AND ";
             }
             // إزالة الكلمة الأخيرة "AND"
             if (!string.IsNullOrEmpty(condition))
@@ -51,54 +57,51 @@ namespace ELNour.Frm
         }
 
         // استعلام قاعدة البيانات وإضافة الصفوف إلى DataGridView
-        private void GetData(string condition)
+        private void GetData(string Condition = "")
         {
             try
             {
-                dgvOperation.SuspendLayout();
+                //dgvOperation.SuspendLayout();
                 dgvOperation.Rows.Clear();
                 if (con.Connection.State == ConnectionState.Closed) { con.OpenConnection(); }
-
-                string query = @"
-                SELECT 
-                    ProcessDetails_tbl.ProcessId AS ProcessId,
-                    ProcessDetails_tbl.ProcessDate AS ProcessDate,
-                    ProcessDetails_tbl.ProductId AS ProductId,
-                    ProcessDetails_tbl.Weight AS Weight,
-                    ProcessDetails_tbl.Good AS Good,
-                    ProcessDetails_tbl.Bad AS Bad,
-                    ProcessDetails_tbl.WeightDifferent AS WeightDifferent,
-                    ProcessDetails_tbl.UserId AS UserId,
-                    Product_tbl.Name AS ProductName,
-                    User_tbl.FullName AS UserName
-                FROM 
-                    ProcessDetails_tbl
-                INNER JOIN 
-                    Product_tbl ON Product_tbl.Id = ProcessDetails_tbl.ProductId
-                INNER JOIN 
-                    User_tbl ON User_tbl.Id = ProcessDetails_tbl.UserId
-                WHERE 
-                    " + condition + @"
-                ORDER BY 
-                    ProcessDetails_tbl.Id"
-                ;
+                string query = $@"
+                                SELECT
+                                    Process_tbl.Id AS ProcessId,
+                                    ProcessDetails_tbl.RecieveId AS RecieveId,
+                                    ProcessDetails_tbl.VendorId AS VendorId,
+                                    ProcessDetails_tbl.ProcessDate AS ProcessDate,
+                                    ProcessDetails_tbl.Weight AS Weight,
+                                    ProcessDetails_tbl.Good AS Good,
+                                    ProcessDetails_tbl.Bad AS Bad,
+                                    ProcessDetails_tbl.WeightDifferent AS WeightDifferent,
+                                    Product_tbl.Id AS ProductID,
+                                    Product_tbl.Name AS ProductName,
+                                    Vendor_tbl.Name AS VendorName,
+                                    User_tbl.FullName AS UserName
+                                FROM
+                                    Process_tbl
+                                INNER JOIN 
+                                     ProcessDetails_tbl 
+                                ON ProcessDetails_tbl.ProcessId = Process_tbl.Id
+                                INNER JOIN Product_tbl ON ProcessDetails_tbl.ProductId = Product_tbl.Id
+                                INNER JOIN Vendor_tbl ON Vendor_tbl.Id = ProcessDetails_tbl.VendorId
+                                INNER JOIN User_tbl ON User_tbl.Id = ProcessDetails_tbl.UserId
+                                WHERE 
+                                    Process_tbl.ProcessDate BETWEEN @date1 AND @date2
+                                    {Condition}
+                                ORDER BY 
+                                    Process_tbl.Id";
 
                 using (SqlDataAdapter da = new SqlDataAdapter(query, con.Connection))
                 {
-                    if (!string.IsNullOrEmpty(condition))
-                    {
-                        da.SelectCommand.Parameters.Add("@date1", SqlDbType.DateTime).Value = txtFromDate.Value;
-                        da.SelectCommand.Parameters.Add("@date2", SqlDbType.DateTime).Value = txtToDate.Value;
-                    }
-
+                    da.SelectCommand.Parameters.Add("@date1", SqlDbType.DateTime).Value = txtFromDate.Value;
+                    da.SelectCommand.Parameters.Add("@date2", SqlDbType.DateTime).Value = txtToDate.Value;
                     DataTable dt = new DataTable();
                     da.Fill(dt);
-
                     foreach (DataRow row in dt.Rows)
                     {
                         AddRowToDataGridView(row);
                     }
-                    lblTotalCount.Text = dgvOperation.Rows.Count.ToString();
                 }
 
                 dgvOperation.ResumeLayout();
@@ -119,15 +122,18 @@ namespace ELNour.Frm
             int rowIndex = dgvOperation.Rows.Add();
             DataGridViewRow currentRow = dgvOperation.Rows[rowIndex];
             currentRow.Cells[0].Value = row["ProcessId"];
-            currentRow.Cells[1].Value = Convert.ToDateTime(row["ProcessDate"]).ToString("dd MMMM");
-            currentRow.Cells[2].Value = Convert.ToDateTime(row["ProcessDate"]).ToString("hh:mm:ss tt");
-            currentRow.Cells[3].Value = row["ProductId"];
-            currentRow.Cells[4].Value = row["ProductName"];
-            currentRow.Cells[5].Value = row["Weight"];
-            currentRow.Cells[6].Value = row["Good"];
-            currentRow.Cells[7].Value = row["Bad"];
-            currentRow.Cells[8].Value = row["WeightDifferent"];
-            currentRow.Cells[9].Value = row["UserName"];
+            currentRow.Cells[1].Value = row["RecieveId"];
+            currentRow.Cells[2].Value = Convert.ToDateTime(row["ProcessDate"]).ToString("dd MMMM");
+            currentRow.Cells[3].Value = Convert.ToDateTime(row["ProcessDate"]).ToString("hh:mm:ss tt");
+            currentRow.Cells[4].Value = row["VendorId"];
+            currentRow.Cells[5].Value = row["VendorName"];
+            currentRow.Cells[6].Value = row["ProductId"];
+            currentRow.Cells[7].Value = row["ProductName"];
+            currentRow.Cells[8].Value = row["Weight"];
+            currentRow.Cells[9].Value = row["Good"];
+            currentRow.Cells[10].Value = row["Bad"];
+            currentRow.Cells[11].Value = row["WeightDifferent"];
+            currentRow.Cells[12].Value = row["UserName"];
         }
         private void Changed(object sender, EventArgs e)
         {
@@ -136,6 +142,12 @@ namespace ELNour.Frm
                 if (cmbProduct.Text == "" || cmbProduct.Text == string.Empty)
                 {
                     cmbProduct.SelectedIndex = -1;
+                    Search();
+                    return;
+                }
+                if (cmbVendor.Text == "" || cmbVendor.Text == string.Empty)
+                {
+                    cmbVendor.SelectedIndex = -1;
                     Search();
                     return;
                 }

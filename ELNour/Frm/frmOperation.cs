@@ -1,21 +1,15 @@
 ﻿using DataBaseOperations;
-using DevExpress.XtraEditors;
 using ELNour.Classes;
 using ELNour.Data;
 using ELNour.Services;
 using MessageBoxes;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
 using System.IO.Ports;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace ELNour.Frm
 {
@@ -71,7 +65,7 @@ namespace ELNour.Frm
                 else
                 {
                     weightData = port.ReadExisting();
-                }                
+                }
                 double Weight = 0;
                 try
                 {
@@ -100,7 +94,7 @@ namespace ELNour.Frm
 
                 }
                 port.DataReceived += Port_DataReceived;
-                
+
 
             }
             catch (Exception ex) { MyBox.Show($"خطأ غير متوقع :{Environment.NewLine} تفاصيل الخطأ : {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error); }
@@ -116,7 +110,7 @@ namespace ELNour.Frm
                 txtPlateWeight.Text = "0";
             }
             fills.fillComboBox(cmbItems, "Product_tbl", "Id", "Name");
-            fills.fillComboBox(cmbVendor, "Vendor_tbl", "Id", "Name","Type", vendorType);
+            fills.fillComboBox(cmbVendor, "Vendor_tbl", "Id", "Name", "Type", vendorType);
             cmbItems.SelectedIndex = -1;
             cmbVendor.SelectedIndex = -1;
             txtUser.Text = User.FullName;
@@ -137,7 +131,7 @@ namespace ELNour.Frm
             txtBoxesWeight.Text = "";
             txtDiscountWeight.Text = "";
         }
-            
+
         private void txtpress(object sender, KeyPressEventArgs e) // Make TextBoxes Don't Accept Chars Only Number Or Decimal
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
@@ -186,7 +180,7 @@ namespace ELNour.Frm
         }
         private void WeightChanged(object sender, EventArgs e) // WeightChanged
         {
-            
+
             SumInPanel1();
         }
         private void tsPlatteWeight_Toggled(object sender, EventArgs e)
