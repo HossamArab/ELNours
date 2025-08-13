@@ -1,6 +1,9 @@
 ﻿using DataBaseOperations;
+using DevExpress.XtraPrinting.Drawing;
+using DevExpress.XtraReports.UI;
 using ELNour.Classes;
 using ELNour.Data;
+using ELNour.Report;
 using ELNour.Services;
 using MessageBoxes;
 using System;
@@ -18,6 +21,8 @@ namespace ELNour.Frm
         DatabaseConnection con;
         DatabaseOperation oper;
         IMaxID max = new MaxID();
+        GetCompanyData Company = new GetCompanyData();
+        GetPrinterData Printer = new GetPrinterData();
         private readonly Fills fills = new Fills();
         string condition = "";
         public frmProcess()
@@ -338,6 +343,18 @@ namespace ELNour.Frm
                 }
                 con.CommitTransaction();
                 MyBox.Show("تم الحفظ بنجاح", "تم الحفظ", MessageBoxButtons.OK, MessageBoxIcon.None);
+                int printType = Printer.PrintAfterSave;
+                switch (printType)
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        PrintProcess(processId);
+                        break;
+                    case 2:
+                        break;
+                }
+                
 
             }
             catch (Exception ex)
@@ -394,6 +411,79 @@ namespace ELNour.Frm
             {
                 SendDataToUpgrade();
             }
+        }
+        private void PrintProcess(int ProcessId)
+        {
+            //try
+            //{
+                rptProcess rpt = new rptProcess();
+                DataSet.dsProcess data = new DataSet.dsProcess();
+                foreach (DataGridViewRow row in dgvOperation.Rows)
+                {
+                    if (Convert.ToBoolean(row.Cells[12].Value))
+                    {
+                        data.DataTable1.Rows.Add();
+                        int rowIndex = data.DataTable1.Rows.Count - 1;
+                        data.DataTable1.Rows[rowIndex]["RecieveId"] = row.Cells[0].Value;
+                        data.DataTable1.Rows[rowIndex]["ProductName"] = row.Cells[6].Value;
+                        data.DataTable1.Rows[rowIndex]["VendorName"] = row.Cells[4].Value;
+                        data.DataTable1.Rows[rowIndex]["NetWeight"] = row.Cells[7].Value;
+                        data.DataTable1.Rows[rowIndex]["Good"] = row.Cells[8].Value;
+                        data.DataTable1.Rows[rowIndex]["Bad"] = row.Cells[9].Value;
+                        data.DataTable1.Rows[rowIndex]["DifferentWeight"] = row.Cells[10].Value;
+                    }
+
+                }
+                rpt.DataSource = data;
+                rpt.lblRecieveId.Text = ProcessId.ToString();
+                ImageSource source = new ImageSource(Company.CompanyLogo);
+                rpt.picCompany.ImageSource = source;
+                if (Printer.PrintCompanyName)
+                {
+                    rpt.lblCompanyName.Text = Company.CompanyName;
+                }
+                else
+                {
+                    rpt.lblCompanyName.Visible = false;
+                }
+                if (Printer.PrintCompanyDescription)
+                {
+                    rpt.lblDescription.Text = Company.CompanyDescription;
+                }
+                else
+                {
+                    rpt.lblDescription.Visible = false;
+                }
+                if (Printer.PrintCompanyLogo)
+                {
+                    rpt.picCompany.Visible = true;
+                }
+                else
+                {
+                    rpt.picCompany.Visible = false;
+                }
+                rpt.lblDate.Text = DateTime.Now.ToString("dd/MM/yyyy  hh:mm:ss  tt");
+                if (Printer.PreviewBeforePrint)
+                {
+                    rpt.ShowPreviewDialog();
+                }
+                else
+                {
+                    if (Printer.RecipteCopy > 1)
+                    {
+                        for (int i = 1; i <= Printer.NoCopy; i++)
+                        {
+                            rpt.Print(Printer.PrinterRecipteName);
+                        }
+                    }
+                    if (Printer.RecipteCopy == 1)
+                    {
+                        rpt.Print(Printer.PrinterRecipteName);
+                    }
+                }
+            //}
+            //catch { }
+            
         }
     }
 }

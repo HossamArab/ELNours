@@ -244,6 +244,14 @@
       <DependentUpon>frmHome.cs</DependentUpon>
     </Compile>
     <Compile Include="Classes\ImportFromExcel.cs" />
+    <Compile Include="DataSet\dsProcess.cs">
+      <DependentUpon>dsProcess.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSet\dsProcess.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsProcess.xsd</DependentUpon>
+    </Compile>
     <Compile Include="DataSet\dsRecieve.cs">
       <DependentUpon>dsRecieve.xsd</DependentUpon>
     </Compile>
@@ -349,6 +357,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Report\rptProcess.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\rptProcess.Designer.cs">
+      <DependentUpon>rptProcess.cs</DependentUpon>
+    </Compile>
     <Compile Include="Report\rptRecieve.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -440,11 +454,25 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Report\rptProcess.resx">
+      <DependentUpon>rptProcess.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Report\rptRecieve.resx">
       <DependentUpon>rptRecieve.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.config" />
     <None Include="app.manifest" />
+    <None Include="DataSet\dsProcess.xsc">
+      <DependentUpon>dsProcess.xsd</DependentUpon>
+    </None>
+    <None Include="DataSet\dsProcess.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsProcess.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="DataSet\dsProcess.xss">
+      <DependentUpon>dsProcess.xsd</DependentUpon>
+    </None>
     <None Include="DataSet\dsRecieve.xsc">
       <DependentUpon>dsRecieve.xsd</DependentUpon>
     </None>
