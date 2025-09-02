@@ -147,7 +147,7 @@ namespace ELNour.Frm
             currentRow.Cells[6].Value = row["ProductName"];
             currentRow.Cells[7].Value = row["TotalNetWeight"];
             currentRow.Cells[8].Value = GoodWeight(Convert.ToInt32(currentRow.Cells[0].Value), Convert.ToInt32(currentRow.Cells[5].Value));
-            currentRow.Cells[10].Value = ((Convert.ToDecimal(currentRow.Cells[8].Value) + Convert.ToDecimal(currentRow.Cells[9].Value)) - Convert.ToDecimal(currentRow.Cells[7].Value));
+            currentRow.Cells[10].Value = (Convert.ToDecimal(currentRow.Cells[7].Value) - (Convert.ToDecimal(currentRow.Cells[8].Value) + Convert.ToDecimal(currentRow.Cells[9].Value)));
             if (Convert.ToDecimal(currentRow.Cells[8].Value) > 0)
             {
                 state = 1;
@@ -252,7 +252,7 @@ namespace ELNour.Frm
             {
                 if (Convert.ToDecimal(currentRow.Cells[8].Value) != 0 && Convert.ToDecimal(currentRow.Cells[7].Value) != 0)
                 {
-                    currentRow.Cells[10].Value = ((Convert.ToDecimal(currentRow.Cells[8].Value) + Convert.ToDecimal(currentRow.Cells[9].Value)) - Convert.ToDecimal(currentRow.Cells[7].Value));
+                    currentRow.Cells[10].Value = (Convert.ToDecimal(currentRow.Cells[7].Value) - (Convert.ToDecimal(currentRow.Cells[8].Value) + Convert.ToDecimal(currentRow.Cells[9].Value)));
                     currentRow.Cells[12].Value = 1;
                 }
 
@@ -293,11 +293,31 @@ namespace ELNour.Frm
             }
             return allFalse;
         }
+        bool isAllUnderZero()
+        {
+            bool allUnderZero = false;
+            foreach (DataGridViewRow row in dgvOperation.Rows)
+            {
+                if (row.IsNewRow) continue;
+
+                if (Convert.ToDecimal(row.Cells[10].Value) <= 0)
+                {
+                    allUnderZero = true;
+                    break;
+                }
+            }
+            return allUnderZero;
+        }
         private void SaveInDataBase()
         {
             if (isAllFalse())
             {
                 MyBox.Show($"لا يمكن الحفظ ما لم يحدث تغير", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (!isAllUnderZero())
+            {
+                MyBox.Show($"لا يمكن الحفظ", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             int processId = (max.MaxIDs("Id", "Process_tbl") + 1);
@@ -317,27 +337,32 @@ namespace ELNour.Frm
                 {
                     if (Convert.ToBoolean(row.Cells[12].Value))
                     {
-                        Dictionary<string, object> ProcessDetails = new Dictionary<string, object>//تفاصيل  العملية 
+                        if (GetDecimalValue(row.Cells[10].Value) <= 0)
                         {
-                            {"ProcessId",processId },
-                            {"RecieveId",Convert.ToInt32(row.Cells[0].Value) },
-                            {"VendorId",Convert.ToInt32(row.Cells[3].Value) },
-                            {"ProductId",Convert.ToInt32(row.Cells[5].Value) },
-                            {"Weight",Convert.ToDecimal(row.Cells[7].Value) },
-                            {"Good",Convert.ToDecimal(row.Cells[8].Value) },
-                            {"Bad",Convert.ToDecimal(row.Cells[9].Value) },
-                            {"WeightDifferent",Convert.ToDecimal(row.Cells[10].Value) },
-                            {"UserId",User.UserID },
-                            {"ProcessDate",DateTime.Now},
-                        };
-                        oper.InsertWithTransaction("ProcessDetails_tbl", ProcessDetails);
-                        Dictionary<string, object> UpdateOperation = new Dictionary<string, object>
-                        {
-                            {"IsProccess",true },
-                        };
-                        string condition = $"RecieveId = {Convert.ToInt32(row.Cells[0].Value)} AND ProductId = {Convert.ToInt32(row.Cells[5].Value)}";
-                        oper.UpdateWithTransaction("RecieveDetails_tbl", UpdateOperation, condition);
-                        oper.DeleteWithTransaction("InProcess_tbl", $"RecieveId = {Convert.ToInt32(row.Cells[0].Value)} AND ProductId = {Convert.ToInt32(row.Cells[5].Value)} ");
+                            Dictionary<string, object> ProcessDetails = new Dictionary<string, object>//تفاصيل  العملية 
+                            {
+                                {"ProcessId",processId },
+                                {"RecieveId",Convert.ToInt32(row.Cells[0].Value) },
+                                {"VendorId",Convert.ToInt32(row.Cells[3].Value) },
+                                {"ProductId",Convert.ToInt32(row.Cells[5].Value) },
+                                {"Weight",GetDecimalValue(row.Cells[7].Value) },
+                                {"Good",GetDecimalValue(row.Cells[8].Value) },
+                                {"Bad",GetDecimalValue(row.Cells[9].Value) },
+                                {"WeightDifferent",Convert.ToDecimal(row.Cells[10].Value) },
+                                {"UserId",User.UserID },
+                                {"ProcessDate",DateTime.Now},
+                            };
+                            oper.InsertWithTransaction("ProcessDetails_tbl", ProcessDetails);
+                            Dictionary<string, object> UpdateOperation = new Dictionary<string, object>
+                            {
+                                {"IsProccess",true },
+                            };
+                            string condition = $"RecieveId = {Convert.ToInt32(row.Cells[0].Value)} AND ProductId = {Convert.ToInt32(row.Cells[5].Value)}";
+                            oper.UpdateWithTransaction("RecieveDetails_tbl", UpdateOperation, condition);
+                            oper.DeleteWithTransaction("InProcess_tbl", $"RecieveId = {Convert.ToInt32(row.Cells[0].Value)} AND ProductId = {Convert.ToInt32(row.Cells[5].Value)} ");
+                        }
+                        
+                        
                     }
 
                 }
@@ -354,7 +379,7 @@ namespace ELNour.Frm
                     case 2:
                         break;
                 }
-                
+
 
             }
             catch (Exception ex)
@@ -375,7 +400,7 @@ namespace ELNour.Frm
                 MyBox.Show($"لا يمكن الحفظ و الجدول فارغ", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
+            
             SaveInDataBase();
             GetData(condition);
         }
@@ -422,15 +447,19 @@ namespace ELNour.Frm
                 {
                     if (Convert.ToBoolean(row.Cells[12].Value))
                     {
-                        data.DataTable1.Rows.Add();
-                        int rowIndex = data.DataTable1.Rows.Count - 1;
-                        data.DataTable1.Rows[rowIndex]["RecieveId"] = row.Cells[0].Value;
-                        data.DataTable1.Rows[rowIndex]["ProductName"] = row.Cells[6].Value;
-                        data.DataTable1.Rows[rowIndex]["VendorName"] = row.Cells[4].Value;
-                        data.DataTable1.Rows[rowIndex]["NetWeight"] = row.Cells[7].Value;
-                        data.DataTable1.Rows[rowIndex]["Good"] = row.Cells[8].Value;
-                        data.DataTable1.Rows[rowIndex]["Bad"] = row.Cells[9].Value;
-                        data.DataTable1.Rows[rowIndex]["DifferentWeight"] = row.Cells[10].Value;
+                        if (Convert.ToDecimal(row.Cells[10].Value) <= 0)
+                        {
+                            data.DataTable1.Rows.Add();
+                            int rowIndex = data.DataTable1.Rows.Count - 1;
+                            data.DataTable1.Rows[rowIndex]["RecieveId"] = row.Cells[0].Value;
+                            data.DataTable1.Rows[rowIndex]["ProductName"] = row.Cells[6].Value;
+                            data.DataTable1.Rows[rowIndex]["VendorName"] = row.Cells[4].Value;
+                            data.DataTable1.Rows[rowIndex]["NetWeight"] = GetDecimalValue(row.Cells[7].Value);
+                            data.DataTable1.Rows[rowIndex]["Good"] = GetDecimalValue(row.Cells[8].Value);
+                            data.DataTable1.Rows[rowIndex]["Bad"] = GetDecimalValue(row.Cells[9].Value);
+                            data.DataTable1.Rows[rowIndex]["DifferentWeight"] = GetDecimalValue(row.Cells[10].Value);
+                        }
+                            
                     }
 
                 }
@@ -482,8 +511,19 @@ namespace ELNour.Frm
                     }
                 }
             //}
-            //catch { }
-            
+            //catch(Exception ex) {
+            //    MyBox.Show($"خطأ غير متوقع : {Environment.NewLine} {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    return;
+            //}
+
+        }
+        decimal GetDecimalValue(object value)
+        {
+            if (value == null || string.IsNullOrEmpty(value.ToString()))
+                return 0;
+
+            decimal.TryParse(value.ToString(), out decimal result);
+            return result;
         }
     }
 }
