@@ -61,6 +61,7 @@
             this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column13 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Column14 = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.Column15 = new System.Windows.Forms.DataGridViewButtonColumn();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl3)).BeginInit();
@@ -225,7 +226,8 @@
             this.Column5,
             this.Column7,
             this.Column13,
-            this.Column14});
+            this.Column14,
+            this.Column15});
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle5.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -380,6 +382,15 @@
             this.Column14.UseColumnTextForButtonValue = true;
             this.Column14.Width = 150;
             // 
+            // Column15
+            // 
+            this.Column15.HeaderText = "انهاء الانتاج";
+            this.Column15.Name = "Column15";
+            this.Column15.Text = "انهاء الانتاج";
+            this.Column15.ToolTipText = "انهاء الانتاج";
+            this.Column15.UseColumnTextForButtonValue = true;
+            this.Column15.Width = 175;
+            // 
             // frmProcess
             // 
             this.Appearance.Options.UseFont = true;
@@ -436,5 +447,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Column13;
         private System.Windows.Forms.DataGridViewButtonColumn Column14;
+        private System.Windows.Forms.DataGridViewButtonColumn Column15;
     }
 }

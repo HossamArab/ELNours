@@ -234,6 +234,7 @@ namespace ELNour.Frm
                 {
                     {"Id",processId },
                     {"RecieveId",Convert.ToInt32(txtRecieveId.Text) },
+                    {"RecieveDate",DateTime.Now },
                     {"VendorId",Convert.ToInt32(cmbVendor.SelectedValue) },
                     {"ProductId",Convert.ToInt32(cmbItems.SelectedValue) },
                     {"BoxesCount",GetDecimalValue(txtCountBoxes.Text) },
@@ -247,6 +248,7 @@ namespace ELNour.Frm
                     {"DiscountWeight",GetDecimalValue(txtDiscountWeight.Text) },
                     {"TotalDiscount",GetDecimalValue(txtTotalDiscount.Text) },
                     {"NetWeight",GetDecimalValue(lblNetWeight.Text) },
+                    {"IsProcessed",0 },
                 };
                 if (con.Connection.State == ConnectionState.Closed)
                     con.Connection.Open();
@@ -333,16 +335,9 @@ namespace ELNour.Frm
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (chkData(Convert.ToInt32(txtRecieveId.Text), Convert.ToInt32(cmbItems.SelectedValue)))
-            {
-                UpdateWeight();
-                frmProcess.Search();
-            }
-            else
-            {
-                InsertNewWeight();
-                frmProcess.Search();
-            }
+           
+            InsertNewWeight();
+            frmProcess.Search();
         }
     }
 }

@@ -283,6 +283,12 @@
     <Compile Include="Frm\frmCustomer.Designer.cs">
       <DependentUpon>frmCustomer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Frm\frmEndProcess.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frm\frmEndProcess.Designer.cs">
+      <DependentUpon>frmEndProcess.cs</DependentUpon>
+    </Compile>
     <Compile Include="Frm\frmMainData.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -406,6 +412,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Frm\frmCustomer.resx">
       <DependentUpon>frmCustomer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frm\frmEndProcess.resx">
+      <DependentUpon>frmEndProcess.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Frm\frmMainData.resx">
       <DependentUpon>frmMainData.cs</DependentUpon>

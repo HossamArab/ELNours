@@ -118,6 +118,18 @@ namespace ELNour
 
         private void btnLogOut_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            // نحصل على الفورم الحالي (اللي فيه الزر)
+            Form currentForm = this;
+
+            // نمر على كل الفورم المفتوحة
+            foreach (Form form in Application.OpenForms.Cast<Form>().ToArray())
+            {
+                // لو الفورم مش هو الفورم الحالي، نغلقه
+                if (form != currentForm)
+                {
+                    form.Close();
+                }
+            }
             User.ResetStaticPropertiesToDefault<UserPermission>();
             SetPermission();
             btnLogin.Enabled = true;

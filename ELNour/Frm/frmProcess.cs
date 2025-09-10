@@ -51,7 +51,7 @@ namespace ELNour.Frm
                 SqlCommand Cmd = new SqlCommand();
                 Cmd.Connection = con.Connection;
                 Cmd.CommandType = CommandType.Text;
-                Cmd.CommandText = ("Select NetWeight From InProcess_tbl Where RecieveId =@RecieveId and ProductId=@ProductId");
+                Cmd.CommandText = ("Select Sum(NetWeight) From InProcess_tbl Where RecieveId =@RecieveId and ProductId=@ProductId");
                 Cmd.Parameters.Clear();
                 Cmd.Parameters.Add("@RecieveId", SqlDbType.Int).Value = RecieveId;
                 Cmd.Parameters.Add("@ProductId", SqlDbType.Int).Value = ProductId;
@@ -126,7 +126,7 @@ namespace ELNour.Frm
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MyBox.Show($"خطأ غير متوقع : {Environment.NewLine} {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -435,6 +435,18 @@ namespace ELNour.Frm
             if (e.ColumnIndex == 13)
             {
                 SendDataToUpgrade();
+            }
+            if (e.ColumnIndex == 14)
+            {
+                if (Convert.ToDecimal(dgvOperation.CurrentRow.Cells[10].Value) <= 0)
+                {
+                    int reciveId = Convert.ToInt32(dgvOperation.CurrentRow.Cells[0].Value);
+                    frmEndProcess frm = new frmEndProcess(reciveId);
+                    frm.lblBadWeight.Text = GetDecimalValue(dgvOperation.CurrentRow.Cells[9].Value).ToString();
+                    frm.lblRecieveWeight.Text = GetDecimalValue(dgvOperation.CurrentRow.Cells[7].Value).ToString();
+                    frm.ShowDialog();
+                }
+                
             }
         }
         private void PrintProcess(int ProcessId)
