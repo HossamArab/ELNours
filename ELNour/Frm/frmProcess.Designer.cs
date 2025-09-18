@@ -45,8 +45,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.panelControl3 = new DevExpress.XtraEditors.PanelControl();
             this.dgvOperation = new System.Windows.Forms.DataGridView();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.btnSave = new DevExpress.XtraEditors.SimpleButton();
             this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column11 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column12 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -62,6 +60,8 @@
             this.Column13 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Column14 = new System.Windows.Forms.DataGridViewButtonColumn();
             this.Column15 = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.btnSave = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl3)).BeginInit();
@@ -251,29 +251,6 @@
             this.dgvOperation.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvOperation_DataError);
             this.dgvOperation.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dgvOperation_EditingControlShowing);
             // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.btnSave);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 620);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1198, 50);
-            this.panel1.TabIndex = 21;
-            // 
-            // btnSave
-            // 
-            this.btnSave.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnSave.ImageOptions.Image = global::ELNour.Properties.Resources.saveall_32x32;
-            this.btnSave.ImageOptions.ImageToTextAlignment = DevExpress.XtraEditors.ImageAlignToText.TopCenter;
-            this.btnSave.ImageOptions.SvgImageSize = new System.Drawing.Size(48, 48);
-            this.btnSave.Location = new System.Drawing.Point(1145, 0);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.PaintStyle = DevExpress.XtraEditors.Controls.PaintStyles.Light;
-            this.btnSave.Size = new System.Drawing.Size(53, 50);
-            this.btnSave.TabIndex = 17;
-            this.btnSave.ToolTip = "حفظ";
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
             // Column8
             // 
             this.Column8.HeaderText = "رقم العميلة";
@@ -390,6 +367,30 @@
             this.Column15.ToolTipText = "انهاء الانتاج";
             this.Column15.UseColumnTextForButtonValue = true;
             this.Column15.Width = 175;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.btnSave);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(0, 620);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1198, 50);
+            this.panel1.TabIndex = 21;
+            this.panel1.Visible = false;
+            // 
+            // btnSave
+            // 
+            this.btnSave.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnSave.ImageOptions.Image = global::ELNour.Properties.Resources.saveall_32x32;
+            this.btnSave.ImageOptions.ImageToTextAlignment = DevExpress.XtraEditors.ImageAlignToText.TopCenter;
+            this.btnSave.ImageOptions.SvgImageSize = new System.Drawing.Size(48, 48);
+            this.btnSave.Location = new System.Drawing.Point(1145, 0);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.PaintStyle = DevExpress.XtraEditors.Controls.PaintStyles.Light;
+            this.btnSave.Size = new System.Drawing.Size(53, 50);
+            this.btnSave.TabIndex = 17;
+            this.btnSave.ToolTip = "حفظ";
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // frmProcess
             // 

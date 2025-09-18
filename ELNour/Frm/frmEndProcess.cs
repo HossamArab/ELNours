@@ -1,8 +1,11 @@
 ﻿using DataBaseOperations;
 using DevExpress.Charts.Native;
 using DevExpress.XtraEditors;
+using DevExpress.XtraPrinting.Drawing;
+using DevExpress.XtraReports.UI;
 using ELNour.Classes;
 using ELNour.Data;
+using ELNour.Report;
 using ELNour.Services;
 using MessageBoxes;
 using System;
@@ -115,6 +118,7 @@ namespace ELNour.Frm
         {
             fills.fillComboBox(cmbVendor, "Vendor_tbl", "Id", "Name");
             cmbVendor.SelectedIndex = -1;
+            dgvSale.Rows.Clear();
             Salesman.Text = User.FullName;
             txtDate.Value = DateTime.Now;
             DataTable dt = new DataTable();
@@ -165,6 +169,213 @@ namespace ELNour.Frm
         private void lblRecieveWeight_TextChanged(object sender, EventArgs e)
         {
             CulcInv();
+        }
+        private void SaveProcess()
+        {
+            txtProcessId.Text = (max.MaxIDs("Id", "Process_tbl") + 1).ToString();
+            if (con.Connection.State == ConnectionState.Closed)
+            {
+                con.OpenConnection();
+            }
+            
+            con.BeginTransaction();
+
+            try
+            {
+                Dictionary<string, object> ProcessData = new Dictionary<string, object> // بيانات العملية الأساسية
+                {
+                    {"Id",Convert.ToInt32(txtProcessId.Text) },
+                    {"ProcessDate",DateTime.Now },
+                    {"UserId",User.UserID },
+                    {"VendorId",Convert.ToInt32(cmbVendor.SelectedValue) },
+                    {"Count",int.Parse(lblCount.Text) },
+                    {"RecieveId",Convert.ToInt32(txtRecieveId.Text) },
+                    {"BoxesCount",int.Parse(lblBoxCount.Text) },
+                    {"TotalWeight",decimal.Parse(lblTotalWeight.Text) },
+                    {"TotalDiscount",decimal.Parse(lblDiscountWeight.Text) },
+                    {"TotalNetWeight", decimal.Parse(lblTotalNetWeight.Text) },
+                    {"TotalRecieveWeight",decimal.Parse(lblRecieveWeight.Text) },
+                    {"TotalBadWeight",decimal.Parse(lblBadWeight.Text) },
+                    {"TotalDifferWeight", decimal.Parse(lblDifferentWeight.Text) },
+                };
+                oper.InsertWithTransaction("Process_tbl", ProcessData);
+                foreach (DataGridViewRow row in dgvSale.Rows)
+                {
+                    Dictionary<string, object> ProcessesDetails = new Dictionary<string, object>//تفاصيل  العملية 
+                    {
+                        {"ProcessId",Convert.ToInt32(txtProcessId.Text) },
+                        {"ProductId",Convert.ToInt32(row.Cells[0].Value) },
+                        {"BoxesCount",Convert.ToInt32(row.Cells[1].Value) },
+                        {"Weight",Convert.ToDecimal(row.Cells[3].Value) },
+                        {"PalleteWeight",Convert.ToDecimal(row.Cells[4].Value) },
+                        {"BoxWeight",Convert.ToDecimal(row.Cells[5].Value) },
+                        {"BoxesWeight",Convert.ToDecimal(row.Cells[6].Value) },
+                        {"DiscountWeight",Convert.ToDecimal(row.Cells[7].Value) },
+                        {"TotalDiscount",Convert.ToDecimal(row.Cells[8].Value) },
+                        {"NetWeight",Convert.ToDecimal(row.Cells[9].Value) },
+                        {"QA",Convert.ToString(row.Cells[10].Value) },
+                        {"UserId",Convert.ToInt32(row.Cells[11].Value) },
+                        {"Notes",Convert.ToString(row.Cells[12].Value) },
+                        {"InProcessId",Convert.ToInt32(row.Cells[14].Value) },
+                    };
+                    oper.InsertWithTransaction("ProcessesDetails_tbl", ProcessesDetails);
+                    Dictionary<string, object> UpdateProcess = new Dictionary<string, object>
+                    {
+                        {"IsProcessed",true },
+                    };
+                    oper.UpdateWithTransaction("InProcess_tbl", UpdateProcess, $"Id = {Convert.ToInt32(row.Cells[14].Value)}");
+                    Dictionary<string, object> UpdateOperation = new Dictionary<string, object>
+                    {
+                        {"IsProccess",true },
+                    };
+                    string condition = $"RecieveId = {Convert.ToInt32(txtRecieveId.Text)} AND ProductId = {Convert.ToInt32(row.Cells[0].Value)}";
+                    oper.UpdateWithTransaction("RecieveDetails_tbl", UpdateOperation, condition);
+                }
+                con.CommitTransaction();
+                MyBox.Show("تم الحفظ بنجاح", "تم الحفظ", MessageBoxButtons.OK, MessageBoxIcon.None);
+
+            }
+            catch (Exception ex)
+            {
+                con.RollbackTransaction();
+                MyBox.Show($"خطأ غير متوقع : {Environment.NewLine} {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            finally
+            {
+                con.CloseConnection();
+            }
+        }
+        private void PrintProcess()
+        {
+            try
+            {
+                SaveProcess();
+                rptProcess rpt = new rptProcess();
+                DataSet.dsRecieve data = new DataSet.dsRecieve();
+                for (int i = 0; i <= dgvSale.Rows.Count - 1; i++)
+                {
+                    data.DataTable1.Rows.Add();
+                    data.DataTable1.Rows[i]["ProductName"] = dgvSale.Rows[i].Cells[2].Value;
+                    data.DataTable1.Rows[i]["Weight"] = dgvSale.Rows[i].Cells[3].Value;
+                    data.DataTable1.Rows[i]["DiscountWeight"] = dgvSale.Rows[i].Cells[8].Value;
+                    data.DataTable1.Rows[i]["NetWeight"] = dgvSale.Rows[i].Cells[9].Value;
+                }
+                rpt.DataSource = data;
+                rpt.lblRecieveId.Text = txtRecieveId.Text;
+                ImageSource source = new ImageSource(Company.CompanyLogo);
+                rpt.picCompany.ImageSource = source;
+                if (Printer.PrintCompanyName)
+                {
+                    rpt.lblCompanyName.Text = Company.CompanyName;
+                }
+                else
+                {
+                    rpt.lblCompanyName.Visible = false;
+                }
+                if (Printer.PrintCompanyDescription)
+                {
+                    rpt.lblDescription.Text = Company.CompanyDescription;
+                }
+                else
+                {
+                    rpt.lblDescription.Visible = false;
+                }
+                if (Printer.PrintCompanyLogo)
+                {
+                    rpt.picCompany.Visible = true;
+                }
+                else
+                {
+                    rpt.picCompany.Visible = false;
+                }
+                rpt.lblDate.Text = DateTime.Now.ToString("dd/MM/yyyy  hh:mm:ss  tt");
+                rpt.lblVendor.Text = cmbVendor.Text;
+                rpt.lblCount.Text = lblCount.Text;
+                rpt.lblBoxesCount.Text = lblBoxCount.Text;
+                rpt.lblTotalWeight.Text = lblTotalWeight.Text;
+                rpt.lblTotalDiscount.Text = lblDiscountWeight.Text;
+                rpt.lblNetWeight.Text = lblTotalNetWeight.Text;
+                rpt.lblBadWeight.Text = lblBadWeight.Text;
+                rpt.lblRecieveWeight.Text = lblRecieveWeight.Text;
+                rpt.lblDifferWeight.Text = lblDifferentWeight.Text;
+                if (Printer.PreviewBeforePrint)
+                {
+                    rpt.ShowPreviewDialog();
+                }
+                else
+                {
+                    if (Printer.RecipteCopy > 1)
+                    {
+                        for (int i = 1; i <= Printer.NoCopy; i++)
+                        {
+                            rpt.Print(Printer.PrinterRecipteName);
+                        }
+                    }
+                    if (Printer.RecipteCopy == 1)
+                    {
+                        rpt.Print(Printer.PrinterRecipteName);
+                    }
+                }
+            }
+            catch { }
+        }
+
+        private void btnMakeReceive_Click(object sender, EventArgs e)
+        {
+            if (Convert.ToDecimal(lblDifferentWeight.Text) > 0)
+            {
+                return;
+            }
+                int printType = Printer.PrintAfterSave;
+            switch (printType)
+            {
+                case 0:
+                    SaveProcess();
+                    break;
+                case 1:
+                    PrintProcess();
+                    break;
+                case 2:
+                    break;
+            }
+        }
+        private void DeleteRecord(int recordId)
+        {
+            try
+            {
+                if (con.Connection.State == ConnectionState.Closed)
+                {
+                    con.OpenConnection();
+                }
+                oper.Delete("InProcess_tbl", $"Id = {recordId}");
+            }
+            catch (Exception ex) {
+                MyBox.Show($"خطأ غير متوقع : {Environment.NewLine} {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            finally { con.CloseConnection(); }
+           
+        }
+        private void dgvSale_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if(!UserPermission.DeleteMakeReceive)
+            {
+                MyBox.Show($"ليس لديك صلاحية للحذف", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+            }
+            if (e.ColumnIndex == 15)
+            {
+                if(MyBox.Show($"سيتم حذف العملية هل أنت متأكد من الحذف؟", "سؤال", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                {
+                    return;
+                }
+                
+                DeleteRecord(Convert.ToInt32(dgvSale.CurrentRow.Cells[14].Value));
+                int recieveId = Convert.ToInt32(txtRecieveId.Text);
+                FillData(recieveId);
+
+            }
         }
     }
 }

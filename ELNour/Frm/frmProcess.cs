@@ -445,6 +445,7 @@ namespace ELNour.Frm
                     frm.lblBadWeight.Text = GetDecimalValue(dgvOperation.CurrentRow.Cells[9].Value).ToString();
                     frm.lblRecieveWeight.Text = GetDecimalValue(dgvOperation.CurrentRow.Cells[7].Value).ToString();
                     frm.ShowDialog();
+                    Search();
                 }
                 
             }

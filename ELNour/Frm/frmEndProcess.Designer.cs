@@ -40,6 +40,12 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmEndProcess));
             this.panel2 = new System.Windows.Forms.Panel();
+            this.lblDifferentWeight = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.lblBadWeight = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.lblRecieveWeight = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.lblTotalWeight = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -90,12 +96,6 @@
             this.Column16 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column17 = new System.Windows.Forms.DataGridViewButtonColumn();
             this.panel4 = new System.Windows.Forms.Panel();
-            this.lblRecieveWeight = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.lblBadWeight = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.lblDifferentWeight = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -133,12 +133,83 @@
             this.panel2.Size = new System.Drawing.Size(898, 141);
             this.panel2.TabIndex = 9;
             // 
+            // lblDifferentWeight
+            // 
+            this.lblDifferentWeight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblDifferentWeight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.lblDifferentWeight.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
+            this.lblDifferentWeight.Location = new System.Drawing.Point(33, 89);
+            this.lblDifferentWeight.Name = "lblDifferentWeight";
+            this.lblDifferentWeight.Size = new System.Drawing.Size(144, 35);
+            this.lblDifferentWeight.TabIndex = 21;
+            this.lblDifferentWeight.Text = "0";
+            this.lblDifferentWeight.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // label9
+            // 
+            this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(129, 73);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(69, 16);
+            this.label9.TabIndex = 20;
+            this.label9.Text = "فرق الوزن";
+            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblBadWeight
+            // 
+            this.lblBadWeight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblBadWeight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.lblBadWeight.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
+            this.lblBadWeight.Location = new System.Drawing.Point(33, 30);
+            this.lblBadWeight.Name = "lblBadWeight";
+            this.lblBadWeight.Size = new System.Drawing.Size(144, 35);
+            this.lblBadWeight.TabIndex = 19;
+            this.lblBadWeight.Text = "0";
+            this.lblBadWeight.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.lblBadWeight.TextChanged += new System.EventHandler(this.lblRecieveWeight_TextChanged);
+            // 
+            // label7
+            // 
+            this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(129, 10);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(70, 16);
+            this.label7.TabIndex = 18;
+            this.label7.Text = "وزن الفرزة";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblRecieveWeight
+            // 
+            this.lblRecieveWeight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblRecieveWeight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.lblRecieveWeight.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
+            this.lblRecieveWeight.Location = new System.Drawing.Point(229, 89);
+            this.lblRecieveWeight.Name = "lblRecieveWeight";
+            this.lblRecieveWeight.Size = new System.Drawing.Size(144, 35);
+            this.lblRecieveWeight.TabIndex = 17;
+            this.lblRecieveWeight.Text = "0";
+            this.lblRecieveWeight.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.lblRecieveWeight.TextChanged += new System.EventHandler(this.lblRecieveWeight_TextChanged);
+            // 
+            // label5
+            // 
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(284, 69);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(126, 16);
+            this.label5.TabIndex = 16;
+            this.label5.Text = "صافي وزن الاستلام";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // lblTotalWeight
             // 
             this.lblTotalWeight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblTotalWeight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.lblTotalWeight.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
-            this.lblTotalWeight.Location = new System.Drawing.Point(464, 30);
+            this.lblTotalWeight.Location = new System.Drawing.Point(431, 30);
             this.lblTotalWeight.Name = "lblTotalWeight";
             this.lblTotalWeight.Size = new System.Drawing.Size(144, 35);
             this.lblTotalWeight.TabIndex = 13;
@@ -172,7 +243,7 @@
             this.lblDiscountWeight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDiscountWeight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.lblDiscountWeight.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
-            this.lblDiscountWeight.Location = new System.Drawing.Point(464, 89);
+            this.lblDiscountWeight.Location = new System.Drawing.Point(431, 89);
             this.lblDiscountWeight.Name = "lblDiscountWeight";
             this.lblDiscountWeight.Size = new System.Drawing.Size(144, 35);
             this.lblDiscountWeight.TabIndex = 15;
@@ -184,7 +255,7 @@
             this.lblCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.lblCount.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
-            this.lblCount.Location = new System.Drawing.Point(675, 30);
+            this.lblCount.Location = new System.Drawing.Point(634, 30);
             this.lblCount.Name = "lblCount";
             this.lblCount.Size = new System.Drawing.Size(144, 35);
             this.lblCount.TabIndex = 1;
@@ -242,7 +313,7 @@
             this.lblBoxCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblBoxCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.lblBoxCount.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
-            this.lblBoxCount.Location = new System.Drawing.Point(675, 89);
+            this.lblBoxCount.Location = new System.Drawing.Point(634, 89);
             this.lblBoxCount.Name = "lblBoxCount";
             this.lblBoxCount.Size = new System.Drawing.Size(144, 35);
             this.lblBoxCount.TabIndex = 3;
@@ -513,6 +584,7 @@
             this.btnMakeReceive.TabIndex = 11;
             this.btnMakeReceive.Tag = "Add";
             this.btnMakeReceive.Text = "حفظ الإذن";
+            this.btnMakeReceive.Click += new System.EventHandler(this.btnMakeReceive_Click);
             // 
             // panel5
             // 
@@ -575,6 +647,7 @@
             this.dgvSale.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvSale.Size = new System.Drawing.Size(898, 468);
             this.dgvSale.TabIndex = 3;
+            this.dgvSale.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSale_CellClick);
             // 
             // Column1
             // 
@@ -723,77 +796,6 @@
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(1198, 141);
             this.panel4.TabIndex = 12;
-            // 
-            // lblRecieveWeight
-            // 
-            this.lblRecieveWeight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblRecieveWeight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.lblRecieveWeight.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
-            this.lblRecieveWeight.Location = new System.Drawing.Point(229, 89);
-            this.lblRecieveWeight.Name = "lblRecieveWeight";
-            this.lblRecieveWeight.Size = new System.Drawing.Size(144, 35);
-            this.lblRecieveWeight.TabIndex = 17;
-            this.lblRecieveWeight.Text = "0";
-            this.lblRecieveWeight.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.lblRecieveWeight.TextChanged += new System.EventHandler(this.lblRecieveWeight_TextChanged);
-            // 
-            // label5
-            // 
-            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(284, 69);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(126, 16);
-            this.label5.TabIndex = 16;
-            this.label5.Text = "صافي وزن الاستلام";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblBadWeight
-            // 
-            this.lblBadWeight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblBadWeight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.lblBadWeight.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
-            this.lblBadWeight.Location = new System.Drawing.Point(33, 30);
-            this.lblBadWeight.Name = "lblBadWeight";
-            this.lblBadWeight.Size = new System.Drawing.Size(144, 35);
-            this.lblBadWeight.TabIndex = 19;
-            this.lblBadWeight.Text = "0";
-            this.lblBadWeight.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.lblBadWeight.TextChanged += new System.EventHandler(this.lblRecieveWeight_TextChanged);
-            // 
-            // label7
-            // 
-            this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(129, 10);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(70, 16);
-            this.label7.TabIndex = 18;
-            this.label7.Text = "وزن الفرزة";
-            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblDifferentWeight
-            // 
-            this.lblDifferentWeight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblDifferentWeight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.lblDifferentWeight.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
-            this.lblDifferentWeight.Location = new System.Drawing.Point(33, 89);
-            this.lblDifferentWeight.Name = "lblDifferentWeight";
-            this.lblDifferentWeight.Size = new System.Drawing.Size(144, 35);
-            this.lblDifferentWeight.TabIndex = 21;
-            this.lblDifferentWeight.Text = "0";
-            this.lblDifferentWeight.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // label9
-            // 
-            this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(129, 73);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(69, 16);
-            this.label9.TabIndex = 20;
-            this.label9.Text = "فرق الوزن";
-            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // frmEndProcess
             // 
