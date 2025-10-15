@@ -79,6 +79,7 @@
             this.btnMakeReceive = new DevExpress.XtraEditors.SimpleButton();
             this.panel5 = new System.Windows.Forms.Panel();
             this.dgvSale = new System.Windows.Forms.DataGridView();
+            this.panel4 = new System.Windows.Forms.Panel();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -95,7 +96,6 @@
             this.Column11 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column16 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column17 = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.panel4 = new System.Windows.Forms.Panel();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -641,19 +641,30 @@
             this.dgvSale.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dgvSale.MultiSelect = false;
             this.dgvSale.Name = "dgvSale";
-            this.dgvSale.ReadOnly = true;
             this.dgvSale.RowHeadersVisible = false;
             this.dgvSale.RowTemplate.Height = 35;
             this.dgvSale.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvSale.Size = new System.Drawing.Size(898, 468);
             this.dgvSale.TabIndex = 3;
             this.dgvSale.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSale_CellClick);
+            this.dgvSale.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSale_CellEndEdit);
+            this.dgvSale.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvSale_DataError);
+            this.dgvSale.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dgvSale_EditingControlShowing);
+            // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.panel6);
+            this.panel4.Controls.Add(this.panel2);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel4.Location = new System.Drawing.Point(0, 529);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(1198, 141);
+            this.panel4.TabIndex = 12;
             // 
             // Column1
             // 
             this.Column1.HeaderText = "رقم المنتج";
             this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
             this.Column1.Visible = false;
             // 
             // Column4
@@ -717,7 +728,6 @@
             this.Column9.DefaultCellStyle = dataGridViewCellStyle6;
             this.Column9.HeaderText = "خصم وزن إضافي";
             this.Column9.Name = "Column9";
-            this.Column9.ReadOnly = true;
             // 
             // Column14
             // 
@@ -726,7 +736,6 @@
             this.Column14.DefaultCellStyle = dataGridViewCellStyle7;
             this.Column14.HeaderText = "إجمالي الخصم";
             this.Column14.Name = "Column14";
-            this.Column14.ReadOnly = true;
             // 
             // Column6
             // 
@@ -783,19 +792,8 @@
             this.Column17.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Column17.HeaderText = "حذف";
             this.Column17.Name = "Column17";
-            this.Column17.ReadOnly = true;
             this.Column17.Text = "-";
             this.Column17.UseColumnTextForButtonValue = true;
-            // 
-            // panel4
-            // 
-            this.panel4.Controls.Add(this.panel6);
-            this.panel4.Controls.Add(this.panel2);
-            this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel4.Location = new System.Drawing.Point(0, 529);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(1198, 141);
-            this.panel4.TabIndex = 12;
             // 
             // frmEndProcess
             // 
@@ -866,6 +864,12 @@
         public System.Windows.Forms.Panel panel4;
         public System.Windows.Forms.TextBox txtProcessId;
         public System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblDifferentWeight;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label5;
+        public System.Windows.Forms.Label lblBadWeight;
+        public System.Windows.Forms.Label lblRecieveWeight;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
@@ -882,11 +886,5 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column11;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column16;
         private System.Windows.Forms.DataGridViewButtonColumn Column17;
-        private System.Windows.Forms.Label lblDifferentWeight;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label5;
-        public System.Windows.Forms.Label lblBadWeight;
-        public System.Windows.Forms.Label lblRecieveWeight;
     }
 }

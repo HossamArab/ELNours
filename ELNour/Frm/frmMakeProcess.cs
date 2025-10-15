@@ -209,6 +209,7 @@ namespace ELNour.Frm
                 port.Dispose();
             }
         }
+        
         private void InsertNewWeight()
         {
             if (Convert.ToDouble(lblNetWeight.Text) <= 0)

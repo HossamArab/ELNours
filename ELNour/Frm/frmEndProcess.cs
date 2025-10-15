@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -262,6 +263,7 @@ namespace ELNour.Frm
                     data.DataTable1.Rows[i]["NetWeight"] = dgvSale.Rows[i].Cells[9].Value;
                 }
                 rpt.DataSource = data;
+                rpt.lblProcessId.Text = txtProcessId.Text;
                 rpt.lblRecieveId.Text = txtRecieveId.Text;
                 ImageSource source = new ImageSource(Company.CompanyLogo);
                 rpt.picCompany.ImageSource = source;
@@ -357,16 +359,48 @@ namespace ELNour.Frm
             finally { con.CloseConnection(); }
            
         }
+        private void Column1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
+            {
+                e.Handled = true;
+            }
+            if (e.KeyChar == '.' && (sender as TextBox).Text.IndexOf('.') > -1)
+            {
+                e.Handled = true;
+            }
+        }
+        private void dgvSale_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            try
+            {
+                e.Control.KeyPress -= new KeyPressEventHandler(Column1_KeyPress);
+                if (dgvSale.CurrentCell.ColumnIndex == 7)
+                {
+                    TextBox tb = e.Control as TextBox;
+                    if (tb != null)
+                    {
+                        tb.KeyPress += new KeyPressEventHandler(Column1_KeyPress);
+                    }
+                }
+            }
+            catch { }
+        }
+        private void dgvSale_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+
+        }
         private void dgvSale_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if(!UserPermission.DeleteMakeReceive)
-            {
-                MyBox.Show($"ليس لديك صلاحية للحذف", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-            }
+            
             if (e.ColumnIndex == 15)
             {
-                if(MyBox.Show($"سيتم حذف العملية هل أنت متأكد من الحذف؟", "سؤال", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                //if (!UserPermission.DeleteMakeReceive)
+                //{
+                //    MyBox.Show($"ليس لديك صلاحية للحذف", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                //    return;
+                //}
+                if (MyBox.Show($"سيتم حذف العملية هل أنت متأكد من الحذف؟", "سؤال", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 {
                     return;
                 }
@@ -376,6 +410,45 @@ namespace ELNour.Frm
                 FillData(recieveId);
 
             }
+        }
+        decimal GetDecimalValue(object value)
+        {
+            if (value == null || string.IsNullOrEmpty(value.ToString()))
+                return 0;
+
+            decimal.TryParse(value.ToString(), out decimal result);
+            return result;
+        }
+        private void dgvSale_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if(e.ColumnIndex == 7)
+            {
+                dgvSale.CurrentRow.Cells[8].Value = Math.Round(GetDecimalValue(dgvSale.CurrentRow.Cells[4].Value) + GetDecimalValue(dgvSale.CurrentRow.Cells[6].Value) + GetDecimalValue(dgvSale.CurrentRow.Cells[7].Value), 3);
+                dgvSale.CurrentRow.Cells[9].Value = Math.Round(GetDecimalValue(dgvSale.CurrentRow.Cells[3].Value) - GetDecimalValue(dgvSale.CurrentRow.Cells[8].Value),3);
+                CulcInv();
+            }
+            int ProccessId = Convert.ToInt32(dgvSale.CurrentRow.Cells[14].Value);
+            UpdateProcessWeight(ProccessId);
+        }
+        private void UpdateProcessWeight(int ProcessId)
+        {
+            try
+            {
+                Dictionary<string, object> OperationData = new Dictionary<string, object>
+                {
+
+                    {"DiscountWeight",GetDecimalValue(dgvSale.CurrentRow.Cells[7].Value) },
+                    {"TotalDiscount",GetDecimalValue(dgvSale.CurrentRow.Cells[8].Value) },
+                    {"NetWeight",GetDecimalValue(dgvSale.CurrentRow.Cells[9].Value) },
+
+                };
+                if (con.Connection.State == ConnectionState.Closed)
+                    con.Connection.Open();
+                oper.Update("InProcess_tbl", OperationData, $"Id = {ProcessId}");
+            }
+            catch (Exception ex) {MyBox.Show($"خطأ في الاتصال بقاعد البيانات :{Environment.NewLine} تفاصيل الخطأ : {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            finally { con.CloseConnection(); }
+            
         }
     }
 }

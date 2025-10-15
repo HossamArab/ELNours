@@ -19,6 +19,7 @@ namespace ELNour.Frm
     {
         DatabaseConnection con;
         private readonly Fills fills = new Fills();
+        string condition = "";
         public frmAllProcess()
         {
             InitializeComponent();
@@ -65,32 +66,38 @@ namespace ELNour.Frm
                 dgvOperation.Rows.Clear();
                 if (con.Connection.State == ConnectionState.Closed) { con.OpenConnection(); }
                 string query = $@"
-                                SELECT
-                                    Process_tbl.Id AS ProcessId,
-                                    ProcessDetails_tbl.RecieveId AS RecieveId,
-                                    ProcessDetails_tbl.VendorId AS VendorId,
-                                    ProcessDetails_tbl.ProcessDate AS ProcessDate,
-                                    ProcessDetails_tbl.Weight AS Weight,
-                                    ProcessDetails_tbl.Good AS Good,
-                                    ProcessDetails_tbl.Bad AS Bad,
-                                    ProcessDetails_tbl.WeightDifferent AS WeightDifferent,
-                                    Product_tbl.Id AS ProductID,
-                                    Product_tbl.Name AS ProductName,
-                                    Vendor_tbl.Name AS VendorName,
-                                    User_tbl.FullName AS UserName
-                                FROM
-                                    Process_tbl
-                                INNER JOIN 
-                                     ProcessDetails_tbl 
-                                ON ProcessDetails_tbl.ProcessId = Process_tbl.Id
-                                INNER JOIN Product_tbl ON ProcessDetails_tbl.ProductId = Product_tbl.Id
-                                INNER JOIN Vendor_tbl ON Vendor_tbl.Id = ProcessDetails_tbl.VendorId
-                                INNER JOIN User_tbl ON User_tbl.Id = ProcessDetails_tbl.UserId
-                                WHERE 
-                                    Process_tbl.ProcessDate BETWEEN @date1 AND @date2
-                                    {Condition}
-                                ORDER BY 
-                                    Process_tbl.Id";
+                SELECT 
+                    Process_tbl.Id AS ProcessId,
+                    Process_tbl.RecieveId AS RecieveId,
+                    Process_tbl.ProcessDate AS ProcessDate,
+                    Process_tbl.VendorId AS VendorID,
+                    ProcessesDetails_tbl.ProductId AS ProductID,
+                    ProcessesDetails_tbl.Weight AS Weight,
+                    ProcessesDetails_tbl.BoxesCount AS Count,
+                    ProcessesDetails_tbl.BoxWeight AS BoxWeight,
+                    ProcessesDetails_tbl.PalleteWeight AS PalleteWeight,
+                    ProcessesDetails_tbl.BoxesWeight AS BoxesWeight,
+                    ProcessesDetails_tbl.DiscountWeight AS DiscountWeight,
+                    ProcessesDetails_tbl.TotalDiscount AS TotalDiscount,
+                    ProcessesDetails_tbl.NetWeight AS NetWeight,
+                    Product_tbl.Name AS ProductName,
+                    Vendor_tbl.Name AS VendorName,
+                    User_tbl.FullName AS UserName
+                FROM 
+                    Process_tbl
+                INNER JOIN 
+                    ProcessesDetails_tbl ON ProcessesDetails_tbl.ProcessId = Process_tbl.Id
+                INNER JOIN 
+                    Product_tbl ON Product_tbl.Id = ProcessesDetails_tbl.ProductId
+                INNER JOIN 
+                    Vendor_tbl ON Vendor_tbl.Id = Process_tbl.VendorId
+                INNER JOIN 
+                    User_tbl ON User_tbl.Id = Process_tbl.UserId
+                WHERE 
+                    Process_tbl.ProcessDate BETWEEN @date1 AND @date2
+                    {Condition}
+                ORDER BY 
+                    Process_tbl.Id";
 
                 using (SqlDataAdapter da = new SqlDataAdapter(query, con.Connection))
                 {
@@ -130,10 +137,9 @@ namespace ELNour.Frm
             currentRow.Cells[6].Value = row["ProductId"];
             currentRow.Cells[7].Value = row["ProductName"];
             currentRow.Cells[8].Value = row["Weight"];
-            currentRow.Cells[9].Value = row["Good"];
-            currentRow.Cells[10].Value = row["Bad"];
-            currentRow.Cells[11].Value = row["WeightDifferent"];
-            currentRow.Cells[12].Value = row["UserName"];
+            currentRow.Cells[9].Value = row["TotalDiscount"];
+            currentRow.Cells[10].Value = row["NetWeight"];
+            currentRow.Cells[11].Value = row["UserName"];
         }
         private void Changed(object sender, EventArgs e)
         {
